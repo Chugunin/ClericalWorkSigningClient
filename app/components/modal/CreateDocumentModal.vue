@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DocumentsCreatePage from '~/pages/documents/create.vue'
 
 const open = defineModel<boolean>('open', {required: true})
 
@@ -20,19 +21,19 @@ function openInNewTab() {
       :overlay="true"
       :close="false"
       :ui="{
-        content: 'w-[70vw] max-w-none h-[70vh]',
-        body: 'flex-1 min-h-0 overflow-auto',
+        content: 'flex h-[90vh] w-[90vw] max-w-none flex-col overflow-hidden',
+        body: 'min-h-0 flex-1 overflow-hidden',
         footer: 'justify-end'
       }"
   >
     <template #content>
       
-      <div class="flex h-[70vh] flex-col overflow-hidden rounded-xl bg-default">
+      <div class="flex h-full min-h-0 w-full flex-col overflow-hidden rounded-xl bg-default">
         
-        <div class="flex items-center justify-between border-b border-default px-4 py-3">
+        <div class="flex shrink-0 items-center justify-between border-b border-default px-4 py-3">
+          
           <div>
-            <h2 class="text-lg font-semibold">Новый документ</h2>
-            <p class="text-sm text-muted">Создание документа в модальном окне</p>
+            <h2 class="text-lg font-semibold">Создание нового документа</h2>
           </div>
 
           <div class="flex items-center gap-2">
@@ -54,8 +55,8 @@ function openInNewTab() {
           </div>
         </div>
 
-        <div class="min-h-0 flex-1 overflow-auto p-4">
-          <DocumentsCreatePageContent/>
+        <div class="flex min-h-0 flex-1 flex-col overflow-hidden p-4">
+          <DocumentsCreatePage v-if="open"/>
         </div>
         
       </div>

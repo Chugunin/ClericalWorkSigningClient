@@ -37,17 +37,18 @@ function onCancel() {
 </script>
 
 <template>
-  <form class="space-y-6" @submit.prevent="onSubmit">
-    <LayoutTwoPaneShell :isLeftPanelCollapsible="false">
+  <form class="flex min-h-0 w-full flex-col gap-4 overflow-hidden" @submit.prevent="onSubmit">
+    <LayoutAppTwoPaneShell class="min-h-0 flex-1 overflow-hidden" :isLeftPanelCollapsible="false">
+     
       <template #left-panel>
         <DocumentsCreateFormMainSection
             v-model="model"
             :persons="persons"
             :right-types="rightTypes"
-            :roleTypes="roleTypes"
-            :decisionTypes="decisionTypes"
-            :originTypes="originTypes"
-            :statusTypes="statusTypes"
+            :role-types="roleTypes"
+            :decision-types="decisionTypes"
+            :origin-types="originTypes"
+            :status-types="statusTypes"
         />
       </template>
 
@@ -57,41 +58,14 @@ function onCancel() {
             :file-types="fileTypes"
         />
       </template>
-    </LayoutTwoPaneShell>
+    </LayoutAppTwoPaneShell>
 
     <DocumentsCreateFormActions
+        class="shrink-0"
         @submit="onSubmit"
         @cancel="onCancel"
     />
   </form>
-  
-  <!--  <TwoSplitPanelsLayout :isLeftPanelCollapsible="false" :isRightPanelCollapsible="true">
-      <template #leftPanel>
-  
-        <div id="header" class="flex shrink-0 justify-center mt-1 mb-1 w-full max-w-full h-8 max-h-1/10 min-h-8">
-          <span class="content-center font-bold text-2xl">Новый документ</span>
-        </div>
-  
-        <USeparator orientation="horizontal"/>
-  
-        <div id="content" class="flex flex-col justify-start flex-1 gap-3 w-full max-w-full min-h-0 overflow-auto">
-  
-  
-          
-        </div>
-  
-        <USeparator orientation="horizontal" class="shrink-0"/>
-  
-        <div id="footer" class="flex shrink-0 justify-center mt-1 mb-1 w-full max-w-full h-8 max-h-1/10 min-h-8">
-          <span class="content-center font-bold text-2xl">Новый документ</span>
-        </div>
-  
-      </template>
-  
-      <template #rightPanel>
-      </template>
-  
-    </TwoSplitPanelsLayout>-->
   
 </template>
 

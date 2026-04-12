@@ -1,8 +1,8 @@
-import type { CalendarDate } from '@internationalized/date'
+import type { DateValue } from '@internationalized/date'
 
 export interface DocumentFormModel {
     name?: string
-    date?: CalendarDate
+    date?: DateValue
     description?: string
     statusId?: number
     originId?: number

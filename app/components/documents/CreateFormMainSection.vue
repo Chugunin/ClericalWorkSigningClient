@@ -43,7 +43,13 @@ const executorItems = computed(() =>
 </script>
 
 <template>
-  <UCard>
+  <UCard
+      class="min-h-0 w-full flex-1"
+      :ui="{
+        root: 'flex h-full min-h-0 flex-col overflow-hidden',
+        body: 'min-h-0 flex-1 overflow-auto'
+      }"
+  >
     <template #header>
       Основная информация
     </template>

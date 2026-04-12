@@ -12,8 +12,14 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="space-y-4">
-    <UCard>
+  <div class="flex min-h-0 w-full flex-1 flex-col">
+    <UCard
+        class="min-h-0 w-full flex-1"
+        :ui="{
+          root: 'flex h-full min-h-0 flex-col overflow-hidden',
+          body: 'min-h-0 flex-1 overflow-hidden'
+        }"
+    >
       <template #header>
         Файлы
       </template>

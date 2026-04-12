@@ -1,38 +1,85 @@
 <script setup lang="ts">
-import {CalendarDate, getLocalTimeZone, today} from '@internationalized/date'
+import {CalendarDate, type DateValue} from '@internationalized/date'
+import {getTodayDateValue} from "~/utils/date";
 
-const targetDate = defineModel<CalendarDate>();
-const datePicker = useTemplateRef('datePicker');
+const props = defineProps<{
+  popoverContentClass?: string
+}>()
+
+const targetDate = defineModel<DateValue | undefined>();
+
+const minDate: DateValue = new CalendarDate(2000, 1, 1);
+const maxDate: DateValue = getTodayDateValue();
+
+function onResetClick() {
+  targetDate.value = undefined;
+}
 
 function onTodayClick() {
-  targetDate.value = new CalendarDate(
-      today(getLocalTimeZone()).year,
-      today(getLocalTimeZone()).month,
-      today(getLocalTimeZone()).day);
+  targetDate.value = getTodayDateValue();
 }
 
 </script>
 
 <template>
-  <UInputDate ref="datePicker" v-model="targetDate" locale="ru-RU">
+  <UInputDate v-model="targetDate">
+
     <template #leading>
-      <UPopover :reference="datePicker?.inputsRef[3]?.$el" :dismissible="true">
+
+      <UPopover
+          :dismissible="true"
+          :ui="{
+            content: props.popoverContentClass
+          }"
+      >
         <UTooltip text="Выбрать дату" :content="{ side: 'bottom' }">
           <UButton
               color="neutral"
               variant="link"
               size="sm"
               icon="i-lucide-calendar"
-              aria-label="Select a date"
+              aria-label="Выбрать дату"
               class="px-0"/>
         </UTooltip>
+
         <template #content>
-          <UCalendar v-model="targetDate" class="p-2" locale="ru-RU"/>
+          <div class="flex flex-col">
+
+            <UCalendar
+                v-model="targetDate"
+                :min-value="minDate"
+                :max-value="maxDate"
+                variant="solid"
+                class="p-2">
+            </UCalendar>
+
+            <USeparator orientation="horizontal" size="sm"/>
+
+            <div class="flex flex-row w-full p-1 gap-1">
+              <UButton
+                  class="w-full justify-center"
+                  label="Сегодня"
+                  variant="ghost"
+                  @click="onTodayClick"
+              />
+              <UButton
+                  class="w-full justify-center"
+                  label="Сброс"
+                  variant="ghost"
+                  color="error"
+                  @click="onResetClick"
+              />
+            </div>
+          </div>
+
+
         </template>
       </UPopover>
+
     </template>
+
     <template #trailing>
-      <UTooltip text="Сбросить на текущую дату" :content="{ side: 'bottom' }">
+      <UTooltip text="Сбросить дату" :content="{ side: 'bottom' }">
         <UButton
             color="neutral"
             variant="link"
@@ -40,9 +87,10 @@ function onTodayClick() {
             icon="i-lucide-x"
             aria-label="Today"
             class="px-0"
-            @click='onTodayClick()'/>
+            @click='onResetClick()'/>
       </UTooltip>
     </template>
+
   </UInputDate>
 </template>
 

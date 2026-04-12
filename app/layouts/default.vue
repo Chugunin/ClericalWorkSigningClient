@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 const sidebarCollapsed = ref(false)
-
 const createModalOpen = ref(false)
+const createDocumentLabel = 'Новый документ'
 
 </script>
 
@@ -35,15 +35,26 @@ const createModalOpen = ref(false)
         >
           
           <LayoutAppSidebarMenu :collapsed="sidebarCollapsed"/>
-          
+
           <template #footer>
-            <div class="flex flex-col w-full">
+            <div class="flex w-full justify-center px-2">
+              <UTooltip v-if="sidebarCollapsed" :text="createDocumentLabel" :content="{ side: 'right' }">
+                <UButton
+                    icon="i-lucide-file-plus"
+                    variant="solid"
+                    square
+                    class="justify-center"
+                    :aria-label="createDocumentLabel"
+                    @click="createModalOpen = true"/>
+              </UTooltip>
+
               <UButton
-                  :class="sidebarCollapsed ? '' : 'justify-center'"
-                  :label="sidebarCollapsed ? '' : 'Новый документ'"
+                  v-else
+                  class="w-full max-w-48 justify-center"
+                  :label="createDocumentLabel"
                   icon="i-lucide-file-plus"
                   variant="solid"
-                  @click="createModalOpen = true"/> 
+                  @click="createModalOpen = true"/>
             </div>
           </template>
           

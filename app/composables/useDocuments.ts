@@ -1,7 +1,5 @@
 import type {Document} from '~~/shared/types/data/document'
 import type {ApiResponse} from '~~/shared/types/api/api-response'
-import type {DocumentFilters} from '~~/shared/types/filters/document-filters'
-import type {Person} from '~~/shared/types/dictionaries/person'
 
 export async function useDocuments() {
     const {data, error, status, refresh} = await useAsyncData(
@@ -25,7 +23,7 @@ export async function useDocuments() {
     }
 }
 
-export async function fetchDocumentsByFilter(filters: DocumentFilters) {
+/*export async function fetchDocumentsByFilter(filters: DocumentFilters) {
     const response = await $fetch<ApiResponse<Document[]>>('/api/documents', {
         method: 'POST',
         body: {
@@ -39,7 +37,7 @@ export async function fetchDocumentsByFilter(filters: DocumentFilters) {
     }
 
     return response.data ?? []
-}
+}*/
 
 export async function createDocument(document: Document) {
     const response = await $fetch<ApiResponse<Document>>('/api/documents', {

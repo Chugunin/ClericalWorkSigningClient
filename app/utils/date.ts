@@ -1,4 +1,4 @@
-import type { CalendarDate } from '@internationalized/date'
+import {CalendarDate, type DateValue, getLocalTimeZone, today} from '@internationalized/date'
 
 export function formatDate(value: string | Date | null | undefined): string {
     if (!value) return ''
@@ -14,7 +14,7 @@ export function formatDate(value: string | Date | null | undefined): string {
     return `${day}.${month}.${year}`
 }
 
-export function formatCalendarDate(value: CalendarDate | null | undefined): string {
+export function formatCalendarDate(value: DateValue | null | undefined): string {
     if (!value) return ''
 
     const day = String(value.day).padStart(2, '0')
@@ -22,4 +22,11 @@ export function formatCalendarDate(value: CalendarDate | null | undefined): stri
     const year = value.year
 
     return `${day}.${month}.${year}`
+}
+
+export function getTodayDateValue(): DateValue {
+    return new CalendarDate(
+        today(getLocalTimeZone()).year,
+        today(getLocalTimeZone()).month,
+        today(getLocalTimeZone()).day);
 }

@@ -1,48 +1,53 @@
 <script setup lang="ts">
+import {useClipboard} from '@vueuse/core';
+
+const props = withDefaults(defineProps<{
+  placeholderText?: string
+  resetVisible?: boolean
+  copyVisible?: boolean
+}>(), {
+  placeholderText: 'Введите текст',
+  resetVisible: true,
+  copyVisible: false,
+});
+
 const value = defineModel<string>();
-const copied = ref(false);
-
-async function copyValue() {
-  if (!value.value) {
-    return
-  }
-
-  await navigator.clipboard.writeText(value.value)
-  copied.value = true
-  window.setTimeout(() => {
-    copied.value = false
-  }, 1500)
-}
+const {copy, copied} = useClipboard();
 
 </script>
 
 <template>
   <UInput
       v-model="value"
-      :ui="{ trailing: 'pe-1' }">
+      :placeholder="placeholderText"
+      :ui="{ trailing: 'pe-1' }"
+  >
+
     <template v-if="value?.length" #trailing>
-      <UTooltip text="Clear" :content="{ side: 'bottom' }">
+
+      <UTooltip text="Очистить поле" :content="{ side: 'bottom' }">
         <UButton
             color="neutral"
             variant="link"
             size="sm"
-            icon="i-lucide-circle-x"
-            aria-label="Clear input"
+            icon="i-lucide-x"
+            aria-label="Очистить поле"
+            :class="resetVisible ? '' : 'hidden'"
             @click="value = ''"/>
       </UTooltip>
-      <UTooltip text="Copy to clipboard" :content="{ side: 'bottom' }">
+
+      <UTooltip text="Скопировать текст" :content="{ side: 'bottom' }">
         <UButton
             :color="copied ? 'success' : 'neutral'"
             variant="link"
             size="sm"
             :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
-            aria-label="Copy to clipboard"
-            @click="copyValue"/>
+            aria-label="Скопировать текст"
+            :class="copyVisible ? '' : 'hidden'"
+            @click="copy(value)"/>
       </UTooltip>
+
     </template>
+
   </UInput>
 </template>
-
-<style scoped>
-
-</style>

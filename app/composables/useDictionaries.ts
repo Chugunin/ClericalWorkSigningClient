@@ -20,13 +20,13 @@ export async function useDictionaries() {
         error,
         status,
         refresh,
-        departments: computed(() => dictionaries.value?.Departments ?? []),
-        persons: computed(() => dictionaries.value?.Persons ?? []),
         fileTypes: computed(() => dictionaries.value?.DocumentFileTypes ?? []),
         statusTypes: computed(() => dictionaries.value?.DocumentStatusTypes ?? []),
+        originTypes: computed(() => dictionaries.value?.DocumentOriginTypes ?? []),
+        departments: computed(() => dictionaries.value?.Departments ?? []),
+        persons: computed(() => dictionaries.value?.Persons ?? []),
         decisionTypes: computed(() => dictionaries.value?.PersonDecisionTypes ?? []),
         rightTypes: computed(() => dictionaries.value?.PersonRightTypes ?? []),
         roleTypes: computed(() => dictionaries.value?.PersonRoleTypes ?? []),
-        originTypes: computed(() => dictionaries.value?.DocumentOriginTypes ?? []),
     }
 }

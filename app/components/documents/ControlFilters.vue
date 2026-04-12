@@ -7,126 +7,142 @@ interface OptionItem {
   value: number
 }
 
-const model = defineModel<DocumentFilters>({required: true})
+const model = defineModel<DocumentFilters>({required: true});
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   statusOptions: OptionItem[]
   executorOptions: OptionItem[]
   departmentOptions: OptionItem[]
-}>()
+}>(), {
+  statusOptions: () => [],
+  executorOptions: () => [],
+  departmentOptions: () => [],
+});
 
 const emit = defineEmits<{
   reset: []
-}>()
+}>();
 
-const filtersExpanded = ref(false);
+function getSelectMenuToolTipText(origins: OptionItem[], values: number[]) {
+  if (origins.length !== 0 && values.length !== 0)
+    return origins
+        .filter(o => values.includes(o.value))
+        .map(o => `[${o.label}]`)
+        .join(', ');
+
+  return 'Не выбран';
+}
+
+const statusesTooltipText = computed(() => {
+  return getSelectMenuToolTipText(props.statusOptions, model.value.statusIds);
+});
+
+const executorsTooltipText = computed(() => {
+  return getSelectMenuToolTipText(props.executorOptions, model.value.executorIds);
+});
 
 </script>
 
 <template>
-  <UCard>
-    <template #header>
-      <div class="flex items-center justify-between gap-3">
-        <div>
-          <h2 class="text-base font-medium">Фильтры</h2>
-          <p class="text-sm text-muted">
-            Уточни список документов по основным параметрам.
-          </p>
-        </div>
+  <div class="space-y-4">
 
-        <div class="flex items-center gap-2">
-          <UButton
-              color="neutral"
-              variant="ghost"
-              icon="i-lucide-rotate-ccw"
-              @click="emit('reset')"
-          >
-            Сбросить
-          </UButton>
+    <div class="flex items-center justify-between gap-3">
+      <div class="text-sm font-medium">Фильтры</div>
 
-          <UButton
-              color="neutral"
-              variant="ghost"
-              :icon="filtersExpanded ? 'i-lucide-chevron-up' : 'i-lucide-chevron-down'"
-              square
-              @click="filtersExpanded = !filtersExpanded"
-          />
-        </div>
-      </div>
-    </template>
+      <UButton
+          size="sm"
+          color="error"
+          variant="outline"
+          icon="i-lucide-rotate-ccw"
+          @click="emit('reset')"
+      >
+        Сбросить
+      </UButton>
+    </div>
 
-    <div v-if="filtersExpanded" class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5 2xl:grid-cols-7">
+    <div class="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
 
       <UFormField label="Поиск" class="p-2 min-w-0">
-        <UInput
-            v-model="model.search"
-            placeholder="Название, описание или ID"
-            icon="i-lucide-search"
-            class="w-full min-w-0"
-        />
+        <UChip :show="model.searchText?.length !== 0" class="w-full min-w-0">
+          <UTooltip :text="model.searchText ?? 'Пусто'" :content="{ side: 'bottom' }">
+            <UiAppTextInput
+                v-model="model.searchText"
+                variant="outline"
+                class="w-full min-w-0"
+                icon="i-lucide-search"
+                placeholder-text="Название, описание, ID"
+            />
+          </UTooltip>
+        </UChip>
       </UFormField>
 
       <UFormField label="Статус" class="p-2 min-w-0">
-        <USelectMenu
-            v-model="model.statusIds"
-            :items="props.statusOptions"
-            multiple
-            value-key="value"
-            option-attribute="label"
-            placeholder="Все статусы"
-            class="w-full min-w-0"
-        />
+        <UChip :show="model.statusIds?.length !== 0" class="w-full min-w-0">
+          <UTooltip :text="statusesTooltipText" :content="{ side: 'bottom' }" arrow>
+            <USelectMenu
+                v-model="model.statusIds"
+                :items="props.statusOptions"
+                multiple
+                clear
+                value-key="value"
+                option-attribute="label"
+                placeholder="Все статусы"
+                class="w-full min-w-0"
+                :content="{
+                  side: 'bottom',
+                  align: 'start',
+                  sideOffset: 8
+                }"
+                :ui="{
+                  content: 'z-[60] documents-control-filters-floating'
+                }"
+            />
+          </UTooltip>
+        </UChip>
       </UFormField>
 
       <UFormField label="Исполнитель" class="p-2 min-w-0">
-        <USelectMenu
-            v-model="model.executorIds"
-            :items="props.executorOptions"
-            multiple
-            value-key="value"
-            option-attribute="label"
-            placeholder="Все исполнители"
-            class="w-full min-w-0"
-        />
+        <UChip :show="model.executorIds?.length !== 0" class="w-full min-w-0">
+          <UTooltip :text="executorsTooltipText" :content="{ side: 'bottom' }" arrow>
+            <USelectMenu
+                v-model="model.executorIds"
+                :items="props.executorOptions"
+                multiple
+                clear
+                value-key="value"
+                option-attribute="label"
+                placeholder="Все"
+                class="w-full min-w-0"
+                :content="{
+                  side: 'bottom',
+                  align: 'start',
+                  sideOffset: 8
+                }"
+                :ui="{
+                  content: 'z-[60] documents-control-filters-floating'
+                }"
+            />
+          </UTooltip>
+        </UChip>
       </UFormField>
 
       <UFormField label="Дата с" class="p-2 min-w-0">
-        <UPopover>
-          <UButton color="neutral" variant="outline" class="w-full justify-between min-w-0">
-            <span>
-              {{
-                formatCalendarDate(model.dateSince) || 'Выбрать дату'
-              }}
-            </span>
-            <UIcon name="i-lucide-calendar"/>
-          </UButton>
-
-          <template #content>
-            <UCalendar v-model="model.dateSince" class="p-2" locale="ru-RU"/>
-          </template>
-        </UPopover>
+        <UChip :show="model.dateSince != null" class="w-full min-w-0">
+          <UiAppDatePicker v-model="model.dateSince" variant="outline" class="w-full min-w-0"
+                           popover-content-class="z-[60] documents-control-filters-floating"/>
+        </UChip>
       </UFormField>
 
       <UFormField label="Дата по" class="p-2 min-w-0">
-        <UPopover>
-          <UButton color="neutral" variant="outline" class="w-full justify-between min-w-0">
-            <span>
-              {{
-                formatCalendarDate(model.dateTill) || 'Выбрать дату'
-              }}
-            </span>
-            <UIcon name="i-lucide-calendar"/>
-          </UButton>
-
-          <template #content>
-            <UCalendar v-model="model.dateTill" class="p-2" locale="ru-RU"/>
-          </template>
-        </UPopover>
+        <UChip :show="model.dateTill != null" class="w-full min-w-0">
+          <UiAppDatePicker v-model="model.dateTill" variant="outline" class="w-full min-w-0"
+                           popover-content-class="z-[60] documents-control-filters-floating"/>
+        </UChip>
       </UFormField>
 
     </div>
 
-  </UCard>
+  </div>
 
 </template>
 

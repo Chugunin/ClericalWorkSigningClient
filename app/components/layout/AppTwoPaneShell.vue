@@ -27,11 +27,12 @@ function toggleRightPanel() {
 
 <template>
   <SplitterGroup
+      class="h-full min-h-0 w-full overflow-hidden"
       direction="horizontal">
 
     <SplitterPanel
         ref="leftPanelRef"
-        class="flex flex-col min-w-1/3 h-full p-2 gap-2 items-center"
+        class="flex h-full min-h-0 min-w-1/3 flex-col items-stretch gap-2 overflow-hidden p-2"
         :default-size="70"
         :collapsible="true">
       <slot name="left-panel"/>
@@ -74,7 +75,7 @@ function toggleRightPanel() {
 
     <SplitterPanel
         ref="rightPanelRef"
-        class="flex flex-col min-w-0 h-full p-2 gap-2 items-center"
+        class="flex h-full min-h-0 min-w-0 flex-col items-stretch gap-2 overflow-hidden p-2"
         :default-size="30"
         :collapsible="true">
       <slot name="right-panel"/>

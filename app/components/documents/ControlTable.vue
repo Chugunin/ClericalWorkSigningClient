@@ -1,24 +1,30 @@
 <script setup lang="ts">
 
 import type {TableColumn} from '@nuxt/ui'
-import {UButton} from "#components";
 import type {Document} from "#shared/types/data/document";
+import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
 import type {Person} from "#shared/types/dictionaries/person";
 import type {Department} from "#shared/types/dictionaries/department";
-import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
+import {UButton} from "#components";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   documents: Document[]
   statusById: Map<number, DocumentStatusType>
   personById: Map<number, Person>
   departmentById: Map<number, Department>
-}>()
+  loading?: boolean
+}>(), {
+  loading: false
+})
 
 const columns: TableColumn<Document>[] = [
   {
     accessorKey: 'Id',
     header: '#',
-    cell: ({row}) => `#${row.getValue('Id')}`,
+    cell: ({row}) => {
+      const value = row.getValue('Id') as string | number | undefined
+      return value ? `#${value}` : '—'
+    },
   },
   {
     id: 'expand',
@@ -41,114 +47,75 @@ const columns: TableColumn<Document>[] = [
   {
     accessorKey: 'Name',
     header: 'Наименование документа',
+    cell: ({row}) => {
+      return (row.getValue('Name') as string | undefined) || '—'
+    },
   },
   {
     accessorKey: 'Description',
-    header: 'Содержание'
+    header: 'Содержание',
+    cell: ({row}) => {
+      const value = row.getValue('Description') as string | undefined
+      return value || '—'
+    },
+    meta: {
+      class: {
+        td: 'max-w-[420px] truncate',
+      }
+    },
   },
   {
-    accessorKey: 'CreatedDate',
-    header: ({column}) => {
-      const isSorted = column.getIsSorted()
-
-      return h(UButton, {
-        color: 'neutral',
-        variant: 'ghost',
-        label: 'Дата документа',
-        icon: isSorted ? (isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow') : 'i-lucide-arrow-up-down',
-        class: '-mx-2.5',
-        onClick: () => {
-          column.toggleSorting(undefined, true)
-        }
-      })
-    },
+    accessorKey: 'CreatedDatetime',
+    header: 'Дата документа',
     cell: ({row}) => {
-      if (!row.getValue('CreatedDate')) {
-        return ''
-      }
-      return new Date(row.getValue('CreatedDate')).toLocaleString('ru-RU', {
-        day: 'numeric',
-        month: 'numeric',
-        year: 'numeric',
-      })
-    }
+      const value = row.getValue('CreatedDatetime') as string | undefined
+      return formatDate(value) || '—'
+    },
   },
   {
     accessorKey: 'StatusId',
-    header: ({column}) => {
-      const isSorted = column.getIsSorted()
-
-      return h(UButton, {
-        color: 'neutral',
-        variant: 'ghost',
-        label: 'Статус',
-        icon: isSorted ? (isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow') : 'i-lucide-arrow-up-down',
-        class: '-mx-2.5',
-        onClick: () => {
-          column.toggleSorting(undefined, true)
-        }
-      })
-    },
+    header: 'Статус',
     cell: ({row}) => {
-      const statusId = row.getValue('StatusId') as (number | undefined);
+      const statusId = row.getValue('StatusId') as number | undefined
+      if (!statusId) return '—'
 
-      if (!statusId)
-        return '';
-
-      return props.statusById.get(statusId)?.Description ?? props.statusById.get(statusId)?.Name ?? '';
+      const status = props.statusById.get(statusId)
+      return status?.Description ?? status?.Name ?? '—'
     }
   },
   {
     accessorKey: 'ExecutorId',
-    header: ({column}) => {
-      const isSorted = column.getIsSorted()
-
-      return h(UButton, {
-        color: 'neutral',
-        variant: 'ghost',
-        label: 'Исполнитель',
-        icon: isSorted ? (isSorted === 'asc' ? 'i-lucide-arrow-up-narrow-wide' : 'i-lucide-arrow-down-wide-narrow') : 'i-lucide-arrow-up-down',
-        class: '-mx-2.5',
-        onClick: () => {
-          column.toggleSorting(undefined, true)
-        }
-      })
-    },
+    header: 'Исполнитель',
     cell: ({row}) => {
-      const executorId = row.getValue('ExecutorId') as (number | undefined);
+      const executorId = row.getValue('ExecutorId') as number | undefined
+      if (!executorId) return '—'
 
-      if (!executorId)
-        return '';
+      const executor = props.personById.get(executorId)
+      if (!executor) return '—'
 
-      const executor = props.personById.get(executorId);
+      const department = executor.DepartmentId
+          ? props.departmentById.get(executor.DepartmentId)
+          : undefined
 
-      if (!executor)
-        return '';
-
-      const department = props.departmentById.get(executor.DepartmentId);
-
-      return `${executor.Name} (${department?.Name ?? ''})`
+      return department
+          ? `${executor.Name} (${department.Name})`
+          : executor.Name
     }
   },
 ]
-const columnsVisibility = ref({Id: false});
+
+const columnVisibility = ref({Id: false});
 
 </script>
 
 <template>
-  <!--      class="h-170"-->
   <UTable
-
-      ref="table"
-      sticky
-      v-model:column-visibility="columnsVisibility"
-      :data="props.documents"
-      :columns="columns"/>
-  <!--  <div class="flex justify-end border-t border-default pt-4 px-4">
-    </div>-->
-
+      :data="documents"
+      :columns="columns"
+      :loading="loading"
+      :column-visibility="columnVisibility"
+      empty="По выбранным фильтрам ничего не найдено"
+      sticky="header"
+      class="w-full"
+  />
 </template>
-
-<style scoped>
-
-</style>
