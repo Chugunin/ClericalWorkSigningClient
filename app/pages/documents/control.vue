@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import type {SigningDocumentFilters} from "#shared/types/data/signing-document-filters";
+import type {DocumentFilters} from "#shared/types/filters/document-filters";
 
 useHead({
   title: 'Контроль согласования'
@@ -16,7 +16,7 @@ const {
   error: dictionariesError
 } = await useDictionaries()
 
-const filters = reactive<SigningDocumentFilters>({
+const filters = reactive<DocumentFilters>({
   search: null,
   dateSince: null,
   dateTill: null,
@@ -49,7 +49,39 @@ const personById = computed(() => new Map(persons.value.map(p => [p.Id, p])))
 const departmentById = computed(() => new Map(departments.value.map(d => [d.Id, d])))
 const statusById = computed(() => new Map(statusTypes.value.map(s => [s.Id, s])))
 
-const filteredDocuments = computed(() => documents)
+const filteredDocuments = computed(() => {
+  const search = filters.searchText?.trim().toLowerCase()
+  const since = filters.dateSince?.toString()
+  const till = filters.dateTill?.toString()
+
+  return documents.value.filter(document => {
+    if (search) {
+      const text = `${document.Id ?? ''} ${document.Name ?? ''} ${document.Description ?? ''}`.toLowerCase()
+
+      if (!text.includes(search)) {
+        return false
+      }
+    }
+
+    if (filters.statusIds?.length && (!document.StatusId || !filters.statusIds.includes(document.StatusId))) {
+      return false
+    }
+
+    if (filters.executorIds?.length && (!document.ExecutorId || !filters.executorIds.includes(document.ExecutorId))) {
+      return false
+    }
+
+    if (since && (!document.CreatedDate || document.CreatedDate < since)) {
+      return false
+    }
+
+    if (till && (!document.CreatedDate || document.CreatedDate > till)) {
+      return false
+    }
+
+    return true
+  })
+})
 
 const isLoading = computed(() =>
     documentsStatus.value === 'pending' || dictionariesStatus.value === 'pending'
@@ -58,7 +90,7 @@ const isLoading = computed(() =>
 const hasError = computed(() => Boolean(documentsError.value || dictionariesError.value))
 
 function resetFilters() {
-  filters.search = null
+  filters.searchText = null
   filters.dateSince = null
   filters.dateTill = null
   filters.statusIds = []
@@ -90,6 +122,7 @@ function resetFilters() {
     <DocumentsControlFilters
         v-model="filters"
         :status-options="statusItems"
+        :executor-options="executorItems"
         :department-options="departmentItems"
         @reset="resetFilters"
     />
@@ -106,7 +139,7 @@ function resetFilters() {
       <template #header>
         <div class="flex items-center justify-between gap-4">
           <div class="text-sm text-muted">
-            Найдено документов: {{ filteredDocuments.value.length }}
+            Найдено документов: {{ filteredDocuments.length }}
           </div>
         </div>
       </template>
@@ -117,13 +150,13 @@ function resetFilters() {
         <USkeleton class="h-10 w-full" />
       </div>
 
-<!--      <DocumentsControlTable
+      <DocumentsControlTable
           v-else
           :documents="filteredDocuments"
           :status-by-id="statusById"
           :person-by-id="personById"
           :department-by-id="departmentById"
-      />-->
+      />
     </UCard>
   </div>
 </template>

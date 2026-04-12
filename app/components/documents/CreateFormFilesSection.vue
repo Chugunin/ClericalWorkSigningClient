@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
 import type {DocumentFormModel} from "~/types/documents/document-form-model";
-import type {SigningDocumentFileType} from "#shared/types/dictionaries/signing-document-file-type";
+import type {DocumentFileType} from "#shared/types/dictionaries/document-file-type";
 
 const model = defineModel<DocumentFormModel>({ required: true })
 
 const props = defineProps<{
-  fileTypes: SigningDocumentFileType[]
+  fileTypes: DocumentFileType[]
 }>()
 
 </script>

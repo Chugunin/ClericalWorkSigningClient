@@ -1,8 +1,18 @@
 <script setup lang="ts">
-import {useClipboard} from '@vueuse/core';
-
 const value = defineModel<string>();
-const {copy, copied} = useClipboard();
+const copied = ref(false);
+
+async function copyValue() {
+  if (!value.value) {
+    return
+  }
+
+  await navigator.clipboard.writeText(value.value)
+  copied.value = true
+  window.setTimeout(() => {
+    copied.value = false
+  }, 1500)
+}
 
 </script>
 
@@ -27,7 +37,7 @@ const {copy, copied} = useClipboard();
             size="sm"
             :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
             aria-label="Copy to clipboard"
-            @click="copy(value)"/>
+            @click="copyValue"/>
       </UTooltip>
     </template>
   </UInput>

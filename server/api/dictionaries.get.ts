@@ -1,47 +1,47 @@
 import {externalApi} from '../utils/external-api'
 import type {ApiResponse} from '~~/shared/types/api/api-response'
 import type {DictionariesResponse} from '~~/shared/types/dictionaries/dictionaries-response'
-import type {SigningDepartment} from '~~/shared/types/dictionaries/signing-department'
-import type {SigningDocumentFileType} from '~~/shared/types/dictionaries/signing-document-file-type'
-import type {SigningDocumentOriginType} from '~~/shared/types/dictionaries/signing-document-origin-type'
-import type {SigningDocumentStatusType} from '~~/shared/types/dictionaries/signing-document-status-type'
-import type {SigningPerson} from '~~/shared/types/dictionaries/signing-person'
-import type {SigningPersonDecisionType} from '~~/shared/types/dictionaries/signing-person-decision-type'
-import type {SigningPersonRightType} from '~~/shared/types/dictionaries/signing-person-right-type'
-import type {SigningPersonRoleType} from '~~/shared/types/dictionaries/signing-person-role-type'
+import type {Department} from '~~/shared/types/dictionaries/department'
+import type {DocumentFileType} from '~~/shared/types/dictionaries/document-file-type'
+import type {DocumentOriginType} from '~~/shared/types/dictionaries/document-origin-type'
+import type {DocumentStatusType} from '~~/shared/types/dictionaries/document-status-type'
+import type {Person} from '~~/shared/types/dictionaries/person'
+import type {PersonDecisionType} from '~~/shared/types/dictionaries/person-decision-type'
+import type {PersonRightType} from '~~/shared/types/dictionaries/person-right-type'
+import type {PersonRoleType} from '~~/shared/types/dictionaries/person-role-type'
 
 export default defineEventHandler(async (event): Promise<ApiResponse<DictionariesResponse>> => {
     const [
-        SigningDocumentFileTypes,
-        SigningDocumentStatusTypes,
-        SigningDepartments,
-        SigningPersons,
-        SigningPersonDecisionTypes,
-        SigningPersonRightTypes,
-        SigningPersonRoleTypes,
-        SigningDocumentOriginTypes,
+        DocumentFileTypes,
+        DocumentStatusTypes,
+        Departments,
+        Persons,
+        PersonDecisionTypes,
+        PersonRightTypes,
+        PersonRoleTypes,
+        DocumentOriginTypes,
     ] = await Promise.all([
-        externalApi<SigningDocumentFileType[]>(event, '/api/signing/dics/GetSigningDocumentFileTypes'),
-        externalApi<SigningDocumentStatusType[]>(event, '/api/signing/dics/GetSigningDocumentStatusTypes'),
-        externalApi<SigningDepartment[]>(event, '/api/signing/dics/GetSigningDepartments'),
-        externalApi<SigningPerson[]>(event, '/api/signing/dics/GetSigningPersons'),
-        externalApi<SigningPersonDecisionType[]>(event, '/api/signing/dics/GetSigningPersonDecisionTypes'),
-        externalApi<SigningPersonRightType[]>(event, '/api/signing/dics/GetSigningPersonRightTypes'),
-        externalApi<SigningPersonRoleType[]>(event, '/api/signing/dics/GetSigningPersonRoleTypes'),
-        externalApi<SigningDocumentOriginType[]>(event, '/api/signing/dics/GetSigningDocumentOriginTypes'),
+        externalApi<DocumentFileType[]>(event, '/api/dics/GetDocumentFileTypes'),
+        externalApi<DocumentStatusType[]>(event, '/api/dics/GetDocumentStatusTypes'),
+        externalApi<Department[]>(event, '/api/dics/GetDepartments'),
+        externalApi<Person[]>(event, '/api/dics/GetPersons'),
+        externalApi<PersonDecisionType[]>(event, '/api/dics/GetPersonDecisionTypes'),
+        externalApi<PersonRightType[]>(event, '/api/dics/GetPersonRightTypes'),
+        externalApi<PersonRoleType[]>(event, '/api/dics/GetPersonRoleTypes'),
+        externalApi<DocumentOriginType[]>(event, '/api/dics/GetDocumentOriginTypes'),
     ])
 
     return {
         success: true,
         data: {
-            SigningDocumentFileTypes,
-            SigningDocumentStatusTypes,
-            SigningDepartments,
-            SigningPersons,
-            SigningPersonDecisionTypes,
-            SigningPersonRightTypes,
-            SigningPersonRoleTypes,
-            SigningDocumentOriginTypes,
+            DocumentFileTypes: DocumentFileTypes ?? [],
+            DocumentStatusTypes: DocumentStatusTypes ?? [],
+            Departments: Departments ?? [],
+            Persons: Persons ?? [],
+            PersonDecisionTypes: PersonDecisionTypes ?? [],
+            PersonRightTypes: PersonRightTypes ?? [],
+            PersonRoleTypes: PersonRoleTypes ?? [],
+            DocumentOriginTypes: DocumentOriginTypes ?? [],
         },
     }
 })

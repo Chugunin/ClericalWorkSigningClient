@@ -1,19 +1,19 @@
-import type { SigningDepartment } from './signing-department'
-import type { SigningDocumentFileType } from './signing-document-file-type'
-import type { SigningDocumentOriginType } from './signing-document-origin-type'
-import type { SigningDocumentStatusType } from './signing-document-status-type'
-import type { SigningPerson } from './signing-person'
-import type { SigningPersonDecisionType } from './signing-person-decision-type'
-import type { SigningPersonRightType } from './signing-person-right-type'
-import type { SigningPersonRoleType } from './signing-person-role-type'
+import type { Department } from './department'
+import type { DocumentFileType } from './document-file-type'
+import type { DocumentOriginType } from './document-origin-type'
+import type { DocumentStatusType } from './document-status-type'
+import type { Person } from './person'
+import type { PersonDecisionType } from './person-decision-type'
+import type { PersonRightType } from './person-right-type'
+import type { PersonRoleType } from './person-role-type'
 
 export interface DictionariesResponse {
-    SigningDocumentFileTypes: SigningDocumentFileType[]
-    SigningDocumentStatusTypes: SigningDocumentStatusType[]
-    SigningDepartments: SigningDepartment[]
-    SigningPersons: SigningPerson[]
-    SigningPersonDecisionTypes: SigningPersonDecisionType[]
-    SigningPersonRightTypes: SigningPersonRightType[]
-    SigningPersonRoleTypes: SigningPersonRoleType[]
-    SigningDocumentOriginTypes: SigningDocumentOriginType[]
+    DocumentFileTypes: DocumentFileType[]
+    DocumentStatusTypes: DocumentStatusType[]
+    Departments: Department[]
+    Persons: Person[]
+    PersonDecisionTypes: PersonDecisionType[]
+    PersonRightTypes: PersonRightType[]
+    PersonRoleTypes: PersonRoleType[]
+    DocumentOriginTypes: DocumentOriginType[]
 }

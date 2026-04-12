@@ -1,7 +1,8 @@
 import type { CalendarDate } from '@internationalized/date'
+import type { Person } from '../dictionaries/person'
 
-export interface SigningDocumentFilters {
-    search?: string | null
+export interface DocumentFilters {
+    searchText?: string | null
     dateSince?: CalendarDate | null
     dateTill?: CalendarDate | null
     statusIds?: number[]

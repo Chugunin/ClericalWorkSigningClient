@@ -1,24 +1,24 @@
 <script setup lang="ts">
 
 import type {DocumentFormModel} from "~/types/documents/document-form-model";
-import type {SigningPersonRightType} from "#shared/types/dictionaries/signing-person-right-type";
-import type {SigningDocumentOriginType} from "#shared/types/dictionaries/signing-document-origin-type";
-import type {SigningDocumentFileType} from "~~/shared/types/dictionaries/signing-document-file-type";
-import type {SigningPersonRoleType} from "#shared/types/dictionaries/signing-person-role-type";
-import type {SigningPersonDecisionType} from "#shared/types/dictionaries/signing-person-decision-type";
-import type {SigningPerson} from "#shared/types/dictionaries/signing-person";
-import type {SigningDocumentStatusType} from "#shared/types/dictionaries/signing-document-status-type";
+import type {PersonRightType} from "#shared/types/dictionaries/person-right-type";
+import type {DocumentOriginType} from "#shared/types/dictionaries/document-origin-type";
+import type {DocumentFileType} from "~~/shared/types/dictionaries/document-file-type";
+import type {PersonRoleType} from "#shared/types/dictionaries/person-role-type";
+import type {PersonDecisionType} from "#shared/types/dictionaries/person-decision-type";
+import type {Person} from "#shared/types/dictionaries/person";
+import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
 
 const model = defineModel<DocumentFormModel>({required: true})
 
 defineProps<{
-  persons: SigningPerson[]
-  rightTypes: SigningPersonRightType[]
-  roleTypes: SigningPersonRoleType[]
-  decisionTypes: SigningPersonDecisionType[]
-  fileTypes: SigningDocumentFileType[]
-  originTypes: SigningDocumentOriginType[]
-  statusTypes: SigningDocumentStatusType[]
+  persons: Person[]
+  rightTypes: PersonRightType[]
+  roleTypes: PersonRoleType[]
+  decisionTypes: PersonDecisionType[]
+  fileTypes: DocumentFileType[]
+  originTypes: DocumentOriginType[]
+  statusTypes: DocumentStatusType[]
 }>()
 
 const emit = defineEmits<{

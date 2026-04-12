@@ -2,6 +2,7 @@
 
 import {today, getLocalTimeZone, CalendarDate} from '@internationalized/date'
 import type {DocumentFormModel} from "~/types/documents/document-form-model";
+import type {Document} from "#shared/types/data/document";
 
 definePageMeta({
   layout: 'documents-create-layout'
@@ -20,17 +21,54 @@ const {
 } = await useDictionaries()
 
 const form = reactive<DocumentFormModel>({
-  search: null,
-  date: null,
-  description: null,
-  statusId: null,
-  originId: null,
-  executorId: null,
+  name: '',
+  date: undefined,
+  description: '',
+  statusId: undefined,
+  originId: undefined,
+  executorId: undefined,
   signerIds: [],
 })
 
+const submitError = ref<string | null>(null)
+const isSubmitting = ref(false)
+
 async function handleSubmit() {
-  console.log('submit', form)
+  submitError.value = null
+
+  if (!form.name?.trim()) {
+    submitError.value = 'Укажите название документа'
+    return
+  }
+
+  isSubmitting.value = true
+
+  try {
+    const executorRecord = form.executorId
+        ? [{
+          PersonId: form.executorId,
+          RoleId: 1,
+          DecisionId: decisionTypes.value[0]?.Id ?? 1,
+        }]
+        : []
+
+    const document: Document = {
+      Name: form.name.trim(),
+      Description: form.description?.trim() || undefined,
+      StatusId: form.statusId,
+      OriginId: form.originId,
+      ExecutorId: form.executorId,
+      Comments: [],
+      Files: [],
+      Records: executorRecord,
+    }
+
+    await createDocument(document)
+  } catch (error) {
+    submitError.value = error instanceof Error ? error.message : 'Не удалось создать документ'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 async function handleCancel() {
@@ -61,6 +99,13 @@ const documentDate = shallowRef<CalendarDate>(new CalendarDate(
     <div v-else-if="error">
       Ошибка загрузки словарей
     </div>
+
+    <UAlert
+        v-if="submitError"
+        color="error"
+        variant="soft"
+        :description="submitError"
+    />
 
     <DocumentsCreateForm
         v-else

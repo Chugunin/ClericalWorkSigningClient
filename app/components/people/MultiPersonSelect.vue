@@ -1,11 +1,8 @@
 <script setup lang="ts">
-import GetSigningPersonRoleTypes from "~/composables/dics/GetSigningPersonRoleTypes";
 import type {IPersonRoleViewModel} from "~/types/view_models/PersonRoleViewModel";
-import GetSigningPersons from "~/composables/dics/GetSigningPersons";
 import type {IPersonViewModel} from "~/types/view_models/PersonViewModel";
 
-const persons = await GetSigningPersons();
-const personRoles = await GetSigningPersonRoleTypes();
+const { persons, roleTypes } = await useDictionaries();
 
 const personItems = ref<IPersonViewModel[]>(persons.value.map(p => (
     {
@@ -15,7 +12,7 @@ const personItems = ref<IPersonViewModel[]>(persons.value.map(p => (
       RoleId: undefined,
     })));
 
-const personRoleItems = ref<IPersonRoleViewModel[]>(personRoles.value.map(r => (
+const personRoleItems = ref<IPersonRoleViewModel[]>(roleTypes.value.map(r => (
     {
       Id: r.Id,
       Text: r.Description!,

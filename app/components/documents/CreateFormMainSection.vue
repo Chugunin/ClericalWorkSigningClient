@@ -1,27 +1,41 @@
 <script setup lang="ts">
 
-import type {SigningPerson} from "#shared/types/dictionaries/signing-person";
-import type {SigningPersonRightType} from "#shared/types/dictionaries/signing-person-right-type";
-import type {SigningPersonRoleType} from "#shared/types/dictionaries/signing-person-role-type";
-import type {SigningPersonDecisionType} from "#shared/types/dictionaries/signing-person-decision-type";
-import type {SigningDocumentOriginType} from "#shared/types/dictionaries/signing-document-origin-type";
-import type {SigningDocumentStatusType} from "#shared/types/dictionaries/signing-document-status-type";
+import type {Person} from "#shared/types/dictionaries/person";
+import type {PersonRightType} from "#shared/types/dictionaries/person-right-type";
+import type {PersonRoleType} from "#shared/types/dictionaries/person-role-type";
+import type {PersonDecisionType} from "#shared/types/dictionaries/person-decision-type";
+import type {DocumentOriginType} from "#shared/types/dictionaries/document-origin-type";
+import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
 import type {DocumentFormModel} from "~/types/documents/document-form-model";
 
 const model = defineModel<DocumentFormModel>({required: true})
 
 const props = defineProps<{
-  persons: SigningPerson[]
-  rightTypes: SigningPersonRightType[]
-  roleTypes: SigningPersonRoleType[]
-  decisionTypes: SigningPersonDecisionType[]
-  originTypes: SigningDocumentOriginType[]
-  statusTypes: SigningDocumentStatusType[]
+  persons: Person[]
+  rightTypes: PersonRightType[]
+  roleTypes: PersonRoleType[]
+  decisionTypes: PersonDecisionType[]
+  originTypes: DocumentOriginType[]
+  statusTypes: DocumentStatusType[]
 }>()
 
 const originTypeItems = computed(() =>
     props.originTypes.map(item => ({
       label: item.Name,
+      value: item.Id,
+    })),
+)
+
+const statusTypeItems = computed(() =>
+    props.statusTypes.map(item => ({
+      label: item.Description ?? item.Name,
+      value: item.Id,
+    })),
+)
+
+const executorItems = computed(() =>
+    props.persons.map(item => ({
+      label: `${item.Rank ?? ''} ${item.Name} (${item.Post ?? ''})`,
       value: item.Id,
     })),
 )
@@ -36,12 +50,19 @@ const originTypeItems = computed(() =>
 
     <div class="space-y-4">
       <UFormField label="Кто согласовывает" class="shrink-0">
-<!--        <AppSinglePersonPicker/>-->
+        <USelectMenu
+            v-model="model.executorId"
+            :items="executorItems"
+            value-key="value"
+            option-attribute="label"
+            placeholder="Выберите исполнителя"
+            class="w-full"
+        />
       </UFormField>
 
       <UFormField label="Что согласовывается" class="shrink-0">
         <USelectMenu
-            :v-model="model.originId"
+            v-model="model.originId"
             :items="originTypeItems"
             value-key="value"
             option-attribute="label"
@@ -51,8 +72,25 @@ const originTypeItems = computed(() =>
       </UFormField>
 
       <UFormField label="Реквизиты" class="shrink-0">
-        <UiAppTextInput variant="soft" type="text" placeholder="Введите название документа..."></UiAppTextInput>
-        <UiAppDatePicker variant="outline" class="w-44 max-w-48 min-w-44 justify-center"/>
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <UiAppTextInput v-model="model.name" variant="soft" type="text" placeholder="Введите название документа..."/>
+          <UiAppDatePicker v-model="model.date" variant="outline" class="w-44 max-w-48 min-w-44 justify-center"/>
+        </div>
+      </UFormField>
+
+      <UFormField label="Статус" class="shrink-0">
+        <USelectMenu
+            v-model="model.statusId"
+            :items="statusTypeItems"
+            value-key="value"
+            option-attribute="label"
+            placeholder="Выберите статус"
+            class="w-full"
+        />
+      </UFormField>
+
+      <UFormField label="Описание" class="shrink-0">
+        <UTextarea v-model="model.description" placeholder="Введите описание документа..." class="w-full"/>
       </UFormField>
 
       <UFormField label="С кем согласовывается" class="shrink-0">

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import GetSigningPersons from "~/composables/dics/GetSigningPersons";
 import type {IPersonViewModel} from "~/types/view_models/PersonViewModel";
 
-const persons = await GetSigningPersons();
+const { persons } = await useDictionaries();
 
 const personItems = ref<IPersonViewModel[]>(persons.value.map(p => (
     {

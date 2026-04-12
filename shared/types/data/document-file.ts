@@ -1,4 +1,4 @@
-export interface SigningDocumentFile {
+export interface DocumentFile {
     Id?: string;
     DocumentId?: string;
     Path: string;

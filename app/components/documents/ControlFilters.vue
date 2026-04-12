@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
-import type {SigningDocumentFilters} from "#shared/types/data/signing-document-filters";
+import type {DocumentFilters} from "#shared/types/filters/document-filters";
 
 interface OptionItem {
   label: string
   value: number
 }
 
-const model = defineModel<SigningDocumentFilters>({required: true})
+const model = defineModel<DocumentFilters>({required: true})
 
 const props = defineProps<{
   statusOptions: OptionItem[]
@@ -59,7 +59,7 @@ const filtersExpanded = ref(false);
 
       <UFormField label="Поиск" class="p-2 min-w-0">
         <UInput
-            :v-model="model.search"
+            v-model="model.search"
             placeholder="Название, описание или ID"
             icon="i-lucide-search"
             class="w-full min-w-0"
@@ -85,7 +85,7 @@ const filtersExpanded = ref(false);
             multiple
             value-key="value"
             option-attribute="label"
-            placeholder="Все подразделения"
+            placeholder="Все исполнители"
             class="w-full min-w-0"
         />
       </UFormField>

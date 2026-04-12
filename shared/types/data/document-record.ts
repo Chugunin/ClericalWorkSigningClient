@@ -1,4 +1,4 @@
-export interface SigningDocumentRecord {
+export interface DocumentRecord {
     Id?: string;
     DocumentId?: string;
     PersonId: number;

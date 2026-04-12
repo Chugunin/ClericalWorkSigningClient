@@ -2,19 +2,19 @@
 
 import type {TableColumn} from '@nuxt/ui'
 import {UButton} from "#components";
-import type {SigningDocument} from "#shared/types/data/signing-document";
-import type {SigningPerson} from "#shared/types/dics/signing-person";
-import type {SigningDepartment} from "#shared/types/dics/signing-department";
-import GetSigningDepartments from "~/composables/dics/GetSigningDepartments";
-import GetSigningPersons from "~/composables/dics/GetSigningPersons";
-import GetSigningDocumentStatusTypes from "~/composables/dics/GetSigningDocumentStatusTypes";
-import GetSigningDocuments from "~/composables/data/GetSigningDocuments";
+import type {Document} from "#shared/types/data/document";
+import type {Person} from "#shared/types/dictionaries/person";
+import type {Department} from "#shared/types/dictionaries/department";
+import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
 
-const signingStatusTypes = await GetSigningDocumentStatusTypes();
-const signingPersons = await GetSigningPersons();
-const signingDepartments = await GetSigningDepartments();
+const props = defineProps<{
+  documents: Document[]
+  statusById: Map<number, DocumentStatusType>
+  personById: Map<number, Person>
+  departmentById: Map<number, Department>
+}>()
 
-const columns: TableColumn<SigningDocument>[] = [
+const columns: TableColumn<Document>[] = [
   {
     accessorKey: 'Id',
     header: '#',
@@ -47,7 +47,7 @@ const columns: TableColumn<SigningDocument>[] = [
     header: 'Содержание'
   },
   {
-    accessorKey: 'CreatedDatetime',
+    accessorKey: 'CreatedDate',
     header: ({column}) => {
       const isSorted = column.getIsSorted()
 
@@ -63,10 +63,10 @@ const columns: TableColumn<SigningDocument>[] = [
       })
     },
     cell: ({row}) => {
-      if (!row.getValue('CreatedDatetime')) {
+      if (!row.getValue('CreatedDate')) {
         return ''
       }
-      return new Date(row.getValue('CreatedDatetime')).toLocaleString('ru-RU', {
+      return new Date(row.getValue('CreatedDate')).toLocaleString('ru-RU', {
         day: 'numeric',
         month: 'numeric',
         year: 'numeric',
@@ -95,7 +95,7 @@ const columns: TableColumn<SigningDocument>[] = [
       if (!statusId)
         return '';
 
-      return signingStatusTypes.value.find(s => s.Id == statusId)?.Description ?? '';
+      return props.statusById.get(statusId)?.Description ?? props.statusById.get(statusId)?.Name ?? '';
     }
   },
   {
@@ -120,19 +120,18 @@ const columns: TableColumn<SigningDocument>[] = [
       if (!executorId)
         return '';
 
-      const executor = signingPersons.value.find(p => p.Id == executorId) as (SigningPerson | undefined);
+      const executor = props.personById.get(executorId);
 
       if (!executor)
         return '';
 
-      const department = signingDepartments.value.find(d => d.Id == executor!.DepartmentId) as (SigningDepartment | undefined);
+      const department = props.departmentById.get(executor.DepartmentId);
 
       return `${executor.Name} (${department?.Name ?? ''})`
     }
   },
 ]
 const columnsVisibility = ref({Id: false});
-const data = ref<SigningDocument[]>((await GetSigningDocuments()).value);
 
 </script>
 
@@ -143,7 +142,7 @@ const data = ref<SigningDocument[]>((await GetSigningDocuments()).value);
       ref="table"
       sticky
       v-model:column-visibility="columnsVisibility"
-      :data="data"
+      :data="props.documents"
       :columns="columns"/>
   <!--  <div class="flex justify-end border-t border-default pt-4 px-4">
     </div>-->
