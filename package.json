@@ -1,0 +1,29 @@
+{
+  "search": "web_document_processing",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/fonts": "^0.14.0",
+    "@nuxt/icon": "^2.2.1",
+    "@nuxt/ui": "^4.5.0",
+    "@pinia/nuxt": "^0.11.3",
+    "jsonwebtoken": "^9.0.3",
+    "lucide": "^0.576.0",
+    "nuxt": "^4.2.2",
+    "reka-ui": "^2.9.5",
+    "tailwindcss": "^4.2.1",
+    "vue": "^3.5.25",
+    "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.95",
+    "@types/jsonwebtoken": "^9.0.10"
+  }
+}
