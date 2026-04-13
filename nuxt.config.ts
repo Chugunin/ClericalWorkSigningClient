@@ -3,9 +3,13 @@ export default defineNuxtConfig({
         apiSecret: process.env.NUXT_API_SECRET || 'default', // NUXT_API_SECRET
         signingApi: process.env.NUXT_SIGNING_API || 'default', // NUXT_SIGNING_API
     },
-    compatibilityDate: '2025-07-15',
+    compatibilityDate: '2026-04-13',
     devtools: {
         enabled: true
+    },
+    devServer: {
+        host: '0.0.0.0',
+        port: 3000,
     },
     ssr: true,
     typescript: {

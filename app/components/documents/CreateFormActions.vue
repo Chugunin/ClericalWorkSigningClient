@@ -9,7 +9,7 @@ const emit = defineEmits<{
 
 <template>
   <div class="flex items-center justify-end gap-3">
-    <UButton color="neutral" variant="soft" @click="emit('cancel')">
+    <UButton color="neutral" variant="soft" @click="emit('cancel')" class="hidden">
       Отмена
     </UButton>
 

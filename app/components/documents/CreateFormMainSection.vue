@@ -12,30 +12,19 @@ const model = defineModel<DocumentFormModel>({required: true})
 
 const props = defineProps<{
   persons: Person[]
-  rightTypes: PersonRightType[]
-  roleTypes: PersonRoleType[]
-  decisionTypes: PersonDecisionType[]
   originTypes: DocumentOriginType[]
-  statusTypes: DocumentStatusType[]
 }>()
 
 const originTypeItems = computed(() =>
     props.originTypes.map(item => ({
-      label: item.Name,
-      value: item.Id,
-    })),
-)
-
-const statusTypeItems = computed(() =>
-    props.statusTypes.map(item => ({
-      label: item.Description ?? item.Name,
+      label: item.Description,
       value: item.Id,
     })),
 )
 
 const executorItems = computed(() =>
     props.persons.map(item => ({
-      label: `${item.Rank ?? ''} ${item.Name} (${item.Post ?? ''})`,
+      label: `${item.Name}`,
       value: item.Id,
     })),
 )
@@ -63,6 +52,7 @@ const executorItems = computed(() =>
             option-attribute="label"
             placeholder="Выберите исполнителя"
             class="w-full"
+            clear
         />
       </UFormField>
 
@@ -72,38 +62,44 @@ const executorItems = computed(() =>
             :items="originTypeItems"
             value-key="value"
             option-attribute="label"
+            placeholder="Выберите тип документа"
             :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200', content: 'min-w-fit' }"
-            :searchInput="false">
-        </USelectMenu>
-      </UFormField>
-
-      <UFormField label="Реквизиты" class="shrink-0">
-        <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
-          <UiAppTextInput v-model="model.name" variant="soft" type="text" placeholder="Введите название документа..."/>
-          <UiAppDatePicker v-model="model.date" variant="outline" class="w-44 max-w-48 min-w-44 justify-center"/>
-        </div>
-      </UFormField>
-
-      <UFormField label="Статус" class="shrink-0">
-        <USelectMenu
-            v-model="model.statusId"
-            :items="statusTypeItems"
-            value-key="value"
-            option-attribute="label"
-            placeholder="Выберите статус"
+            :searchInput="false"
             class="w-full"
+            clear
         />
       </UFormField>
 
-      <UFormField label="Описание" class="shrink-0">
-        <UTextarea v-model="model.description" placeholder="Введите описание документа..." class="w-full"/>
-      </UFormField>
-
-      <UFormField label="С кем согласовывается" class="shrink-0">
-<!--          <AppMultiPersonCollapsiblePicker id="signers"/>-->
-      </UFormField>
-
-      <UFormField label="Связанные документы" class="shrink-0">
+      <UFormField label="Реквизиты" class="shrink-0">
+        <div class="flex flex-col items-center gap-2">
+          <UiAppTextInput
+              v-model="model.name"
+              variant="soft"
+              type="text"
+              placeholder="Введите название документа"
+              class="w-full"
+          />
+          <div class="flex flex-row justify-between w-full gap-2">
+            <UBadge
+                label="Дата документа"
+                color="primary"
+                variant="soft"
+            />
+            <UiAppDatePicker
+                v-model="model.date"
+                variant="outline"
+                class="w-full justify-center"
+            />
+          </div>
+          <UTextarea
+              v-model="model.description"
+              placeholder="Введите описание документа"
+              class="w-full"
+              :rows="4"
+              
+              autoresize
+          />
+        </div>
       </UFormField>
 
     </div>

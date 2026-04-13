@@ -32,18 +32,53 @@ const model = shallowReactive<DocumentFormModel>({
   signerIds: [],
 })
 
-const submitError = ref<string | null>(null)
+const toast = useToast()
 const isSubmitting = ref(false)
 
 async function handleSubmit() {
-  submitError.value = null
+  toast.clear()
+
+  const submitMessages = ref<{
+    text: string,
+    level: 'error' | 'warning' | 'info'
+  }[]>([])
 
   if (!model.name?.trim()) {
-    submitError.value = 'Укажите название документа'
-    return
+    submitMessages.value.push({text: 'Укажите название документа', level: 'error'})
   }
 
-  isSubmitting.value = true
+  if (!model.date) {
+    submitMessages.value.push({text: 'Укажите дату документа', level: 'error'})
+  }
+
+  if (!model.executorId) {
+    submitMessages.value.push({text: 'Укажите исполнителя документа', level: 'error'})
+  }
+
+  if (!model.originId) {
+    submitMessages.value.push({text: 'Укажите тип документа', level: 'error'})
+  }
+
+  if (!model.signerIds || model.signerIds.length == 0) {
+    submitMessages.value.push({text: 'Укажите с кем документ согласовывается', level: 'error'})
+  }
+
+  else {
+    submitMessages.value.push({text: model.signerIds.map(s => `[${s.signerId} - ${s.roleId}]`).join(", "), level: "info"})
+  }
+
+  if (!model.description) {
+    submitMessages.value.push({text: 'Укажите описание документа', level: 'warning'})
+  }
+
+  submitMessages.value.forEach((message) => {
+    showSubmitMessageToast(message.text, message.level)
+  })
+
+  if (submitMessages.value.filter(message => message.level === 'error').length > 0)
+    return
+
+  /*isSubmitting.value = true
 
   try {
     const executorRecord = model.executorId
@@ -67,16 +102,35 @@ async function handleSubmit() {
 
     await createDocument(document)
   } catch (error) {
-    submitError.value = error instanceof Error ? error.message : 'Не удалось создать документ'
+    showSubmitError(error instanceof Error ? error.message : 'Не удалось создать документ')
   } finally {
     isSubmitting.value = false
-  }
+  }*/
 }
 
 function handleCancel() {
   console.log('cancel', model)
 }
-  
+
+function showSubmitMessageToast(messageText: string, messageLevel: 'error' | 'warning' | 'info') {
+  const title = {
+    'error': 'Не удалось создать документ',
+    'warning': 'Указаны некорректные данные',
+    'info': 'Информация',
+  }
+
+  toast.add({
+    id: Math.random().toString(36).slice(2, 16),
+    title: title[messageLevel],
+    description: messageText,
+    color: messageLevel,
+    icon: 'i-lucide-circle-alert',
+    duration: 3000,
+    close: true,
+    progress: true,
+  })
+}
+
 </script>
 
 <template>
@@ -88,14 +142,6 @@ function handleCancel() {
     <div v-else-if="error" class="min-h-0 flex-1">
       Ошибка загрузки словарей
     </div>
-
-    <UAlert
-        v-if="submitError"
-        class="shrink-0"
-        color="error"
-        variant="soft"
-        :description="submitError"
-    />
 
     <DocumentsCreateForm
         v-else

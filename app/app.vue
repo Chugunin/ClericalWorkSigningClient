@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import * as locales from '@nuxt/ui/locale'
+import {shallowReadonly} from "vue";
 
 useHead({
   titleTemplate: (titleChunk) =>
@@ -10,7 +11,7 @@ useHead({
 
 <template>
   <NuxtLoadingIndicator/>
-  <UApp :locale="locales.ru">
+  <UApp :locale="locales.ru" :toaster="{ position: 'top-right' }">
     <NuxtLayout>
       <NuxtPage/>
     </NuxtLayout>

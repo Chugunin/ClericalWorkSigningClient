@@ -1,5 +1,10 @@
 import type { DateValue } from '@internationalized/date'
 
+export interface DocumentFormSigner {
+    signerId: number
+    roleId: number
+}
+
 export interface DocumentFormModel {
     name?: string
     date?: DateValue
@@ -7,5 +12,5 @@ export interface DocumentFormModel {
     statusId?: number
     originId?: number
     executorId?: number
-    signerIds?: number[]
+    signerIds?: DocumentFormSigner[]
 }

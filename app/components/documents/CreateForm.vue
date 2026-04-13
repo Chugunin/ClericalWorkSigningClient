@@ -38,7 +38,16 @@ function onCancel() {
 
 <template>
   <form class="flex min-h-0 w-full flex-col gap-4 overflow-hidden" @submit.prevent="onSubmit">
-    <LayoutAppTwoPaneShell class="min-h-0 flex-1 overflow-hidden" :isLeftPanelCollapsible="false">
+    <LayoutAppThreePaneShell 
+        class="min-h-0 flex-1 overflow-hidden" 
+        layout-state-key="documents-create-form"
+        :default-sizes="[30, 30, 40]"
+        :min-sizes="[30, 40, 10]"
+        :is-left-panel-collapsible="false"
+        :is-left-panel-resizable="false"
+        :is-center-panel-collapsible="false"
+        :is-right-panel-enabled="true"
+    >
      
       <template #left-panel>
         <DocumentsCreateFormMainSection
@@ -52,13 +61,22 @@ function onCancel() {
         />
       </template>
 
+      <template #center-panel>
+        <DocumentsCreateFormSignersSection
+            v-model="model"
+            :persons="persons"
+            :role-types="roleTypes"
+        />
+      </template>
+
       <template #right-panel>
         <DocumentsCreateFormFilesSection
             v-model="model"
             :file-types="fileTypes"
         />
       </template>
-    </LayoutAppTwoPaneShell>
+      
+    </LayoutAppThreePaneShell>
 
     <DocumentsCreateFormActions
         class="shrink-0"
