@@ -56,7 +56,7 @@ function openInNewTab() {
         </div>
 
         <div class="flex min-h-0 flex-1 flex-col overflow-hidden p-4">
-          <DocumentsCreatePage v-if="open"/>
+          <DocumentsCreatePage v-if="open" @closeContainer="closeModal"/>
         </div>
         
       </div>

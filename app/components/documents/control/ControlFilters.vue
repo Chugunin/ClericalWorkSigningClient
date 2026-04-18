@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import type {DocumentFilters} from "#shared/types/filters/document-filters";
+import type {DocumentFilters} from "#shared/types/contracts/requests/filters/document-filters";
 
 interface OptionItem {
   label: string

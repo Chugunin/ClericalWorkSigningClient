@@ -5,7 +5,7 @@ export function formatDate(value: string | Date | null | undefined): string {
 
     const date = typeof value === 'string' ? new Date(value) : value
 
-    if (isNaN(date.getTime())) return ''
+    if (isNaN(date.getDate())) return ''
 
     const day = String(date.getDate()).padStart(2, '0')
     const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -22,6 +22,16 @@ export function formatCalendarDate(value: DateValue | null | undefined): string 
     const year = value.year
 
     return `${day}.${month}.${year}`
+}
+
+export function formatDateToISO(value: DateValue | null | undefined): string {
+    if (!value) return ''
+
+    const day = String(value.day).padStart(2, '0')
+    const month = String(value.month).padStart(2, '0')
+    const year = value.year
+
+    return `${year}-${month}-${day}`
 }
 
 export function getTodayDateValue(): DateValue {

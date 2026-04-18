@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import type {Document} from '#shared/types/data/document'
+import type {Document} from '#shared/types/contracts/responses/documents/document'
 import type {DocumentFormModel} from '~/types/documents/document-form-model'
+import {validateCreateForm} from "~/components/documents/create/validateCreateForm";
+import {formatDate, formatDateToISO} from "~/utils/date";
+import type {CreateDocumentRequestData} from "#shared/types/contracts/requests/documents/create-document-request-data";
+import {createNewDocument} from "~/components/documents/create/createNewDocument";
 
 definePageMeta({
   layout: 'documents-create-layout'
@@ -32,104 +36,52 @@ const model = shallowReactive<DocumentFormModel>({
   signerIds: [],
 })
 
-const toast = useToast()
+const toast = useAppToast()
 const isSubmitting = ref(false)
 
 async function handleSubmit() {
   toast.clear()
 
-  const submitMessages = ref<{
-    text: string,
-    level: 'error' | 'warning' | 'info'
-  }[]>([])
+  const messages = validateCreateForm(model)
 
-  if (!model.name?.trim()) {
-    submitMessages.value.push({text: 'Укажите название документа', level: 'error'})
-  }
+  toast.showMany(messages)
 
-  if (!model.date) {
-    submitMessages.value.push({text: 'Укажите дату документа', level: 'error'})
-  }
-
-  if (!model.executorId) {
-    submitMessages.value.push({text: 'Укажите исполнителя документа', level: 'error'})
-  }
-
-  if (!model.originId) {
-    submitMessages.value.push({text: 'Укажите тип документа', level: 'error'})
-  }
-
-  if (!model.signerIds || model.signerIds.length == 0) {
-    submitMessages.value.push({text: 'Укажите с кем документ согласовывается', level: 'error'})
-  }
-
-  else {
-    submitMessages.value.push({text: model.signerIds.map(s => `[${s.signerId} - ${s.roleId}]`).join(", "), level: "info"})
-  }
-
-  if (!model.description) {
-    submitMessages.value.push({text: 'Укажите описание документа', level: 'warning'})
-  }
-
-  submitMessages.value.forEach((message) => {
-    showSubmitMessageToast(message.text, message.level)
-  })
-
-  if (submitMessages.value.filter(message => message.level === 'error').length > 0)
-    return
-
-  /*isSubmitting.value = true
+  if (messages.some(message => message.level === 'error'))
+    return;
 
   try {
-    const executorRecord = model.executorId
-        ? [{
-          PersonId: model.executorId,
-          RoleId: roleTypes.value[0]?.Id ?? 1,
-          DecisionId: decisionTypes.value[0]?.Id ?? 1,
-        }]
-        : []
+    isSubmitting.value = true
 
-    const document: Document = {
-      Name: model.name.trim(),
-      Description: model.description?.trim() || undefined,
-      StatusId: model.statusId,
-      OriginId: model.originId,
-      ExecutorId: model.executorId,
-      Comments: [],
-      Files: [],
-      Records: executorRecord,
-    }
+    const documentResponse = await createNewDocument(model)
 
-    await createDocument(document)
+    const duration = 3000
+
+    toast.show(
+        {
+          text: `Документ ${documentResponse.Name} от ${formatDate(documentResponse.CreatedDate)} создан`,
+          level: "success"
+        }
+        , duration
+    )
+
+    emit('closeContainer')
+
   } catch (error) {
-    showSubmitError(error instanceof Error ? error.message : 'Не удалось создать документ')
+    const text = error instanceof Error ? error.message : "Не удалось создать документ"
+    toast.show({text: text, level: 'error'})
   } finally {
     isSubmitting.value = false
-  }*/
+  }
 }
 
 function handleCancel() {
   console.log('cancel', model)
 }
 
-function showSubmitMessageToast(messageText: string, messageLevel: 'error' | 'warning' | 'info') {
-  const title = {
-    'error': 'Не удалось создать документ',
-    'warning': 'Указаны некорректные данные',
-    'info': 'Информация',
-  }
+const emit = defineEmits<{
+  closeContainer: []
+}>()
 
-  toast.add({
-    id: Math.random().toString(36).slice(2, 16),
-    title: title[messageLevel],
-    description: messageText,
-    color: messageLevel,
-    icon: 'i-lucide-circle-alert',
-    duration: 3000,
-    close: true,
-    progress: true,
-  })
-}
 
 </script>
 

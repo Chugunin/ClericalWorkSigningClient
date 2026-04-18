@@ -1,5 +1,6 @@
-import type {Document} from '~~/shared/types/data/document'
+import type {Document} from '#shared/types/contracts/responses/documents/document'
 import type {ApiResponse} from '~~/shared/types/api/api-response'
+import type {CreateDocumentRequestData} from "#shared/types/contracts/requests/documents/create-document-request-data";
 
 export async function useDocuments() {
     const {data, error, status, refresh} = await useAsyncData(
@@ -39,7 +40,7 @@ export async function useDocuments() {
     return response.data ?? []
 }*/
 
-export async function createDocument(document: Document) {
+export async function createDocument(document: CreateDocumentRequestData) {
     const response = await $fetch<ApiResponse<Document>>('/api/documents', {
         method: 'POST',
         body: {

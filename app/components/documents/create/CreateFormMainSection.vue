@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
-import type {Person} from "#shared/types/dictionaries/person";
-import type {PersonRightType} from "#shared/types/dictionaries/person-right-type";
-import type {PersonRoleType} from "#shared/types/dictionaries/person-role-type";
-import type {PersonDecisionType} from "#shared/types/dictionaries/person-decision-type";
-import type {DocumentOriginType} from "#shared/types/dictionaries/document-origin-type";
-import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
+import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
+import type {PersonRightType} from "#shared/types/contracts/responses/dictionaries/person-right-type";
+import type {PersonRoleType} from "#shared/types/contracts/responses/dictionaries/person-role-type";
+import type {PersonDecisionType} from "#shared/types/contracts/responses/dictionaries/person-decision-type";
+import type {DocumentOriginType} from "#shared/types/contracts/responses/dictionaries/document-origin-type";
+import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
 import type {DocumentFormModel} from "~/types/documents/document-form-model";
 
 const model = defineModel<DocumentFormModel>({required: true})

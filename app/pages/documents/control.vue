@@ -1,11 +1,11 @@
 <script setup lang="ts">
 
 import {onClickOutside} from '@vueuse/core'
-import type {Document} from "#shared/types/data/document";
-import type {DocumentFilters} from "#shared/types/filters/document-filters";
-import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
-import type {Person} from "#shared/types/dictionaries/person";
-import type {Department} from "#shared/types/dictionaries/department";
+import type {Document} from "#shared/types/contracts/responses/documents/document";
+import type {DocumentFilters} from "#shared/types/contracts/requests/filters/document-filters";
+import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
+import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
+import type {Department} from "#shared/types/contracts/responses/dictionaries/department";
 
 useHead({
   title: 'Контроль согласования'

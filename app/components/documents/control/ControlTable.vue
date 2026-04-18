@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
 import type {TableColumn} from '@nuxt/ui'
-import type {Document} from "#shared/types/data/document";
-import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
-import type {Person} from "#shared/types/dictionaries/person";
-import type {Department} from "#shared/types/dictionaries/department";
+import type {Document} from "#shared/types/contracts/responses/documents/document";
+import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
+import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
+import type {Department} from "#shared/types/contracts/responses/dictionaries/department";
 import {UButton} from "#components";
 
 const props = withDefaults(defineProps<{
@@ -65,10 +65,10 @@ const columns: TableColumn<Document>[] = [
     },
   },
   {
-    accessorKey: 'CreatedDatetime',
+    accessorKey: 'CreatedDate',
     header: 'Дата документа',
     cell: ({row}) => {
-      const value = row.getValue('CreatedDatetime') as string | undefined
+      const value = row.getValue('CreatedDate') as string | undefined
       return formatDate(value) || '—'
     },
   },

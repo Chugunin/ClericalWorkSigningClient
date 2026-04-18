@@ -1,13 +1,13 @@
 <script setup lang="ts">
 
 import type {DocumentFormModel} from "~/types/documents/document-form-model";
-import type {PersonRightType} from "#shared/types/dictionaries/person-right-type";
-import type {DocumentOriginType} from "#shared/types/dictionaries/document-origin-type";
-import type {DocumentFileType} from "~~/shared/types/dictionaries/document-file-type";
-import type {PersonRoleType} from "#shared/types/dictionaries/person-role-type";
-import type {PersonDecisionType} from "#shared/types/dictionaries/person-decision-type";
-import type {Person} from "#shared/types/dictionaries/person";
-import type {DocumentStatusType} from "#shared/types/dictionaries/document-status-type";
+import type {PersonRightType} from "#shared/types/contracts/responses/dictionaries/person-right-type";
+import type {DocumentOriginType} from "#shared/types/contracts/responses/dictionaries/document-origin-type";
+import type {DocumentFileType} from "#shared/types/contracts/responses/dictionaries/document-file-type";
+import type {PersonRoleType} from "#shared/types/contracts/responses/dictionaries/person-role-type";
+import type {PersonDecisionType} from "#shared/types/contracts/responses/dictionaries/person-decision-type";
+import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
+import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
 
 const model = defineModel<DocumentFormModel>({required: true})
 
@@ -80,7 +80,6 @@ function onCancel() {
 
     <DocumentsCreateFormActions
         class="shrink-0"
-        @submit="onSubmit"
         @cancel="onCancel"
     />
   </form>
