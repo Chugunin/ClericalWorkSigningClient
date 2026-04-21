@@ -21,14 +21,14 @@ export default defineEventHandler(async (event): Promise<ApiResponse<Dictionarie
         PersonRoleTypes,
         DocumentOriginTypes,
     ] = await Promise.all([
-        externalApi<DocumentFileType[]>(event, '/api/dics/GetDocumentFileTypes'),
-        externalApi<DocumentStatusType[]>(event, '/api/dics/GetDocumentStatusTypes'),
-        externalApi<Department[]>(event, '/api/dics/GetDepartments'),
-        externalApi<Person[]>(event, '/api/dics/GetPersons'),
-        externalApi<PersonDecisionType[]>(event, '/api/dics/GetPersonDecisionTypes'),
-        externalApi<PersonRightType[]>(event, '/api/dics/GetPersonRightTypes'),
-        externalApi<PersonRoleType[]>(event, '/api/dics/GetPersonRoleTypes'),
-        externalApi<DocumentOriginType[]>(event, '/api/dics/GetDocumentOriginTypes'),
+        externalApi<DocumentFileType[]>(event, '/api/dictionaries/GetDocumentFileTypes'),
+        externalApi<DocumentStatusType[]>(event, '/api/dictionaries/GetDocumentStatusTypes'),
+        externalApi<Department[]>(event, '/api/dictionaries/GetDepartments'),
+        externalApi<Person[]>(event, '/api/dictionaries/GetPersons'),
+        externalApi<PersonDecisionType[]>(event, '/api/dictionaries/GetPersonDecisionTypes'),
+        externalApi<PersonRightType[]>(event, '/api/dictionaries/GetPersonRightTypes'),
+        externalApi<PersonRoleType[]>(event, '/api/dictionaries/GetPersonRoleTypes'),
+        externalApi<DocumentOriginType[]>(event, '/api/dictionaries/GetDocumentOriginTypes'),
     ])
 
     return {

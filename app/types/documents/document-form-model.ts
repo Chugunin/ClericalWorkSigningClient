@@ -13,4 +13,5 @@ export interface DocumentFormModel {
     originId?: number
     executorId?: number
     signerIds?: DocumentFormSigner[]
+    fileEntryIds?: string[] //Guid
 }

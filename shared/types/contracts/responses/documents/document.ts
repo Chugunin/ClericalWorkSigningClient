@@ -1,6 +1,6 @@
-import type {DocumentComment} from '#shared/types/contracts/responses/documents/document-comment'
-import type {DocumentFile} from '#shared/types/contracts/responses/documents/document-file'
-import type {DocumentRecord} from '#shared/types/contracts/responses/documents/document-record'
+import type {DocumentComment} from '#shared/types/contracts/responses/comments/document-comment'
+import type {DocumentFile} from '#shared/types/contracts/responses/document-files/document-file'
+import type {DocumentRecord} from '#shared/types/contracts/responses/records/document-record'
 
 export interface Document {
     Id?: string;

@@ -1,6 +1,6 @@
 export interface DocumentFile {
     Id?: string;
-    DocumentId?: string;
-    Path: string;
+    DocumentId: string;
+    FileEntryId: string;
     TypeId: number;
 }

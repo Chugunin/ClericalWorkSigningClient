@@ -53,8 +53,8 @@ export function useAppToast() {
         }
     }
 
-    function showMany(messages: AppToastMessage[]) {
-        messages.forEach(m => show(m))
+    function showMany(messages: AppToastMessage[], duration = 3000, useProgress = false) {
+        messages.forEach(m => show(m, duration, useProgress))
     }
 
     function error(text: string) {

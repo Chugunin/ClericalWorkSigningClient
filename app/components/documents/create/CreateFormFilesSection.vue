@@ -11,6 +11,7 @@ const props = defineProps<{
 
 const files = ref<File[]>([])
 const previewMap = ref<Record<string, string>>({})
+const mainFileKey = ref<string | null>(null)
 
 function fileKey(file: File) {
   return `${file.name}_${file.size}_${file.lastModified}`
@@ -41,6 +42,23 @@ watch(files, (newFiles, oldFiles = []) => {
   previewMap.value = next
 }, {deep: true})
 
+async function saveFiles(): Promise<string[]> {
+  const ids: string[] = []
+
+  for (const file of files.value ?? []) {
+    const saved = await saveFile(file)
+
+    if (saved.Id)
+      ids.push(saved.Id!)
+  }
+
+  return ids
+}
+
+defineExpose({
+  saveFiles
+})
+
 onBeforeUnmount(() => {
   for (const url of Object.values(previewMap.value)) {
     URL.revokeObjectURL(url)
@@ -52,11 +70,27 @@ function getPreviewUrl(file: File) {
 }
 
 function removeFile(index: number) {
+  if (mainFileKey.value === fileKey(files.value[index] as File))
+    mainFileKey.value = null
+
   files.value.splice(index, 1)
+
+  if (!mainFileKey.value && files.value.length > 0)
+    mainFileKey.value = fileKey(files.value[0] as File)
 }
 
 function clearAll() {
   files.value = []
+
+  mainFileKey.value = null
+}
+
+function markMainFile(file: File) {
+  mainFileKey.value = fileKey(file)
+}
+
+function isMainFile(file: File) {
+  return mainFileKey.value === fileKey(file)
 }
 
 const fileUploadUi = computed(() => ({
@@ -85,102 +119,6 @@ const fileUploadUi = computed(() => ({
         Файлы
       </template>
 
-      <!--            <UFileUpload
-                      v-model="files"
-                      multiple
-                      :interactive="false"
-                      :highlight="false"
-                      label="Перетащи сюда файлы"
-                      description="или нажми кнопку ниже"
-                      class="h-full min-h-0 m-0.5"
-                      :ui="{
-                        base: 'overflow-auto',
-                        files: 'mt-4'
-                      }"
-                  >
-                    <template #actions="{ open }">
-                      <div v-if="!files?.length" class="flex flex-wrap gap-2">
-                        <UButton
-                            icon="i-lucide-upload"
-                            label="Добавить файлы"
-                            variant="outline"
-                            @click="open()"
-                        />
-                      </div>
-                    </template>
-      
-                    <template #files-top="{ open, files }">
-                      <div v-if="files?.length" class="mt-2 mb-2 flex items-center justify-between">
-                        
-                        <p class="font-bold">Всего: ({{ files?.length }})</p>
-      
-                        <div class="flex items-center gap-1">
-      
-                          <UTooltip text="Добавить файл">
-                            <UButton
-                                icon="i-lucide-plus"
-                                color="neutral"
-                                variant="outline"
-                                class="-my-2"
-                                @click="open()"
-                            />
-                          </UTooltip>
-      
-                          <UTooltip text="Удалить все">
-                            <UButton
-                                icon="i-lucide-trash"
-                                color="neutral"
-                                variant="outline"
-                                class="-my-2"
-                                @click="clearAll"
-                            />
-                          </UTooltip>
-                        </div>
-      
-                      </div>
-                    </template>
-      
-                    <template #files="{ files: slotFiles }">
-                      <div v-if="slotFiles?.length" class="space-y-2">
-      
-                        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                          <div
-                              v-for="(file, index) in slotFiles"
-                              :key="getFileKey(file)"
-                              class="rounded-lg border border-default bg-default p-3"
-                          >
-                            <div class="flex items-start justify-between gap-3">
-                              <div class="min-w-0">
-                                <div class="truncate font-medium">
-                                  {{ file.name }}
-                                </div>
-      
-                                <div class="mt-1 text-sm text-muted">
-                                  {{ formatSize(file.size) }}
-                                </div>
-      
-                                <div
-                                    v-if="meta[getFileKey(file)]?.status"
-                                    class="mt-2 text-xs text-muted"
-                                >
-                                  Статус: {{ meta[getFileKey(file)]?.status }}
-                                </div>
-                              </div>
-      
-                              <UButton
-                                  icon="i-lucide-x"
-                                  color="error"
-                                  variant="ghost"
-                                  size="sm"
-                                  @click="removeAt(index)"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </template>
-                  </UFileUpload>-->
-
       <UFileUpload
           v-model="files"
           layout="grid"
@@ -206,9 +144,9 @@ const fileUploadUi = computed(() => ({
 
         <template #files-top="{ open, files }">
           <div v-if="files?.length" class="mb-2 flex items-center justify-between">
-            <span class="text-md font-bold">Добавлено: ({{ files?.length }})</span>
+            <span class="text-md font-bold">Добавлено: {{ files?.length }}</span>
 
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-2">
 
               <UTooltip text="Добавить файл">
                 <UButton
@@ -235,16 +173,14 @@ const fileUploadUi = computed(() => ({
         </template>
 
         <template #file="{ file, index }">
-          <UTooltip
-              :text="file.name"
-              :disabled="file.name.length < 20"
-              :ui="{
-                content: 'max-w-xs break-words'
-              }"
+
+          <div
+              class="group relative text-xs gap-1.5 p-0 aspect-square border-b-3 rounded-2xl"
+              :class="isMainFile(file) ? 'border-primary' : 'border-transparent'"
           >
-            <div class="relative text-xs gap-1.5 p-0 aspect-square">
               <span
-                  class="inline-flex items-center justify-center select-none align-middle bg-elevated text-base shrink-0 size-full rounded-lg">
+                  class="inline-flex items-center justify-center select-none align-middle bg-elevated text-base shrink-0 size-full rounded-lg"
+              >
                 
                 <img
                     v-if="getPreviewUrl(file)"
@@ -262,32 +198,59 @@ const fileUploadUi = computed(() => ({
                 
               </span>
 
-              <UBadge
-                  :label="getFileInfo(file).ext" 
-                  :color="getFileInfo(file).color"
-                  class="absolute top-2 left-1/2 -translate-x-1/2 z-10 text-md font-bold uppercase"
-                  variant="solid"
-              />
+            <UBadge
+                :label="getFileInfo(file).ext"
+                :color="getFileInfo(file).color"
+                class="absolute top-2 left-1/2 -translate-x-1/2 z-10 text-md font-bold uppercase"
+                variant="solid"
+            />
 
-              <div class="absolute inset-0 flex items-end p-2 pointer-events-none">
-                <div class="w-full rounded bg-inverted/75 text-inverted text-xs px-2 py-1 truncate">
+            <div class="absolute inset-x-0 bottom-0 z-10 p-2">
+              <UTooltip
+                  :text="file.name"
+                  :disabled="file.name.length < 20"
+                  :ui="{ content: 'max-w-xs break-words' }"
+              >
+                <div class="w-full rounded bg-inverted/75 px-2 py-1 text-xs text-inverted truncate">
                   {{ file.name }}
                 </div>
-              </div>
-
-              <UButton
-                  variant="solid"
-                  size="xl"
-                  class="absolute -top-1.5 -inset-s-1.5 z-10 p-0 gap-1 
-                    bg-accented/75 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75 
-                    border-2 border-default rounded-full"
-                  @click.stop="removeFile(index)"
-              >
-                <UIcon name="i-lucide-x"/>
-              </UButton>
-
+              </UTooltip>
             </div>
-          </UTooltip>
+
+            <div
+                class="pointer-events-none absolute inset-0 z-20 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+            >
+              <UTooltip
+                  text="Удалить файл"
+                  :ui="{ content: 'max-w-xs break-words' }"
+              >
+                <UButton
+                    variant="solid"
+                    size="xl"
+                    class="pointer-events-auto absolute -top-1.5 -left-1.5 z-10 gap-1 rounded-full border-2 border-default bg-accented/75 p-0 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75"
+                    @click.stop="removeFile(index)"
+                >
+                  <UIcon name="i-lucide-x" class="pointer-events-none"/>
+                </UButton>
+              </UTooltip>
+
+              <UTooltip
+                  text="Отметить основным"
+                  :ui="{ content: 'max-w-xs break-words' }"
+              >
+                <UButton
+                    variant="solid"
+                    size="xl"
+                    class="pointer-events-auto absolute -top-1.5 -right-1.5 z-10 gap-1 rounded-full border-2 border-default bg-accented/75 p-0 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75"
+                    :class="isMainFile(file) ? 'border-primary text-primary' : ''"
+                    @click.stop="markMainFile(file)"
+                >
+                  <UIcon name="i-lucide-check" class="pointer-events-none"/>
+                </UButton>
+              </UTooltip>
+            </div>
+
+          </div>
         </template>
 
       </UFileUpload>

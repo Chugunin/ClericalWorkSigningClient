@@ -8,8 +8,11 @@ import type {PersonRoleType} from "#shared/types/contracts/responses/dictionarie
 import type {PersonDecisionType} from "#shared/types/contracts/responses/dictionaries/person-decision-type";
 import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
 import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
+import type CreateFormFilesSection from "~/components/documents/create/CreateFormFilesSection.vue";
 
 const model = defineModel<DocumentFormModel>({required: true})
+
+const filesSectionRef = ref<InstanceType<typeof CreateFormFilesSection> | null>(null)
 
 defineProps<{
   persons: Person[]
@@ -26,7 +29,9 @@ const emit = defineEmits<{
   cancel: []
 }>()
 
-function onSubmit() {
+async function onSubmit() {
+  model.value.fileEntryIds = await filesSectionRef.value?.saveFiles() ?? []
+  
   emit('submit')
 }
 
@@ -71,6 +76,7 @@ function onCancel() {
 
       <template #right-panel>
         <DocumentsCreateFormFilesSection
+            ref="filesSectionRef"
             v-model="model"
             :file-types="fileTypes"
         />
@@ -80,6 +86,7 @@ function onCancel() {
 
     <DocumentsCreateFormActions
         class="shrink-0"
+        @submit="onSubmit"
         @cancel="onCancel"
     />
   </form>

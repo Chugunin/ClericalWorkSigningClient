@@ -44,7 +44,7 @@ async function handleSubmit() {
 
   const messages = validateCreateForm(model)
 
-  toast.showMany(messages)
+  toast.showMany(messages, 5000, true)
 
   if (messages.some(message => message.level === 'error'))
     return;
@@ -54,14 +54,12 @@ async function handleSubmit() {
 
     const documentResponse = await createNewDocument(model)
 
-    const duration = 3000
-
     toast.show(
         {
           text: `Документ ${documentResponse.Name} от ${formatDate(documentResponse.CreatedDate)} создан`,
           level: "success"
         }
-        , duration
+        , 3000
     )
 
     emit('closeContainer')
