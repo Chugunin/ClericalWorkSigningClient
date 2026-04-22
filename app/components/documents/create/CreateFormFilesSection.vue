@@ -1,7 +1,8 @@
 <script setup lang="ts">
 
-import type {DocumentFormModel} from "~/types/documents/document-form-model";
+import type {DocumentFormFile, DocumentFormModel} from "~/types/documents/create/form-model";
 import type {DocumentFileType} from "#shared/types/contracts/responses/dictionaries/document-file-type";
+import {saveFileEntry} from "~/composables/api/useFileEntries";
 
 const model = defineModel<DocumentFormModel>({required: true})
 
@@ -10,88 +11,26 @@ const props = defineProps<{
 }>()
 
 const files = ref<File[]>([])
-const previewMap = ref<Record<string, string>>({})
-const mainFileKey = ref<string | null>(null)
 
-function fileKey(file: File) {
-  return `${file.name}_${file.size}_${file.lastModified}`
-}
+const {
+  mainFileKey,
 
-watch(files, (newFiles, oldFiles = []) => {
-  const next: Record<string, string> = {}
+  isMainFile,
+  getPreviewUrl,
 
-  for (const file of newFiles) {
-    const key = fileKey(file)
+  markMainFile,
+  removeFile,
+  clearAll,
+  saveAll,
 
-    if (previewMap.value[key]) {
-      next[key] = previewMap.value[key]
-      continue
-    }
-
-    if (file.type.startsWith('image/')) {
-      next[key] = URL.createObjectURL(file)
-    }
-  }
-
-  for (const [key, url] of Object.entries(previewMap.value)) {
-    if (!next[key]) {
-      URL.revokeObjectURL(url)
-    }
-  }
-
-  previewMap.value = next
-}, {deep: true})
-
-async function saveFiles(): Promise<string[]> {
-  const ids: string[] = []
-
-  for (const file of files.value ?? []) {
-    const saved = await saveFile(file)
-
-    if (saved.Id)
-      ids.push(saved.Id!)
-  }
-
-  return ids
-}
+} = useFiles(files, {
+  saveFile: saveFileEntry,
+})
 
 defineExpose({
-  saveFiles
+  saveAll,
+  mainFileKey,
 })
-
-onBeforeUnmount(() => {
-  for (const url of Object.values(previewMap.value)) {
-    URL.revokeObjectURL(url)
-  }
-})
-
-function getPreviewUrl(file: File) {
-  return previewMap.value[fileKey(file)]
-}
-
-function removeFile(index: number) {
-  if (mainFileKey.value === fileKey(files.value[index] as File))
-    mainFileKey.value = null
-
-  files.value.splice(index, 1)
-
-  if (!mainFileKey.value && files.value.length > 0)
-    mainFileKey.value = fileKey(files.value[0] as File)
-}
-
-function clearAll() {
-  files.value = []
-
-  mainFileKey.value = null
-}
-
-function markMainFile(file: File) {
-  mainFileKey.value = fileKey(file)
-}
-
-function isMainFile(file: File) {
-  return mainFileKey.value === fileKey(file)
-}
 
 const fileUploadUi = computed(() => ({
   base: [
@@ -175,7 +114,7 @@ const fileUploadUi = computed(() => ({
         <template #file="{ file, index }">
 
           <div
-              class="group relative text-xs gap-1.5 p-0 aspect-square border-b-3 rounded-2xl"
+              class="group relative text-xs gap-1.5 p-0 aspect-square border-3 rounded-lg"
               :class="isMainFile(file) ? 'border-primary' : 'border-transparent'"
           >
               <span
@@ -227,7 +166,7 @@ const fileUploadUi = computed(() => ({
                 <UButton
                     variant="solid"
                     size="xl"
-                    class="pointer-events-auto absolute -top-1.5 -left-1.5 z-10 gap-1 rounded-full border-2 border-default bg-accented/75 p-0 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75"
+                    class="pointer-events-auto absolute -top-1.5 -left-1.5 z-10 gap-1 rounded-full border-2 border-default bg-accented/85 p-0 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75"
                     @click.stop="removeFile(index)"
                 >
                   <UIcon name="i-lucide-x" class="pointer-events-none"/>
@@ -241,9 +180,9 @@ const fileUploadUi = computed(() => ({
                 <UButton
                     variant="solid"
                     size="xl"
-                    class="pointer-events-auto absolute -top-1.5 -right-1.5 z-10 gap-1 rounded-full border-2 border-default bg-accented/75 p-0 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75"
+                    class="pointer-events-auto absolute -top-1.5 -right-1.5 z-10 gap-1 rounded-full border-2 border-default bg-accented/85 p-0 text-default/75 hover:bg-inverted hover:text-inverted active:bg-accented/85 active:text-default/75"
                     :class="isMainFile(file) ? 'border-primary text-primary' : ''"
-                    @click.stop="markMainFile(file)"
+                    @click.stop="markMainFile(index)"
                 >
                   <UIcon name="i-lucide-check" class="pointer-events-none"/>
                 </UButton>

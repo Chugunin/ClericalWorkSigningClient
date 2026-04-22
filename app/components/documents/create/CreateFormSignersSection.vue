@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 
-import type {DocumentFormModel} from "~/types/documents/document-form-model";
+import type {DocumentFormModel} from "~/types/documents/create/form-model";
 import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
 import type {PersonRoleType} from "#shared/types/contracts/responses/dictionaries/person-role-type";
 

@@ -25,6 +25,10 @@ export default defineNuxtConfig({
     css: [
         '~/assets/css/main.css',
     ],
+    imports: {
+        autoImport: true,
+        dirs: ['~/composables/**'],
+    },
     modules: [
         '@nuxt/ui',
         '@nuxt/icon',

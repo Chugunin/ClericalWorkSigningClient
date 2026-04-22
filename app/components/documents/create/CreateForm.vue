@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import type {DocumentFormModel} from "~/types/documents/document-form-model";
+import type {DocumentFormModel} from "~/types/documents/create/form-model";
 import type {PersonRightType} from "#shared/types/contracts/responses/dictionaries/person-right-type";
 import type {DocumentOriginType} from "#shared/types/contracts/responses/dictionaries/document-origin-type";
 import type {DocumentFileType} from "#shared/types/contracts/responses/dictionaries/document-file-type";
@@ -30,7 +30,7 @@ const emit = defineEmits<{
 }>()
 
 async function onSubmit() {
-  model.value.fileEntryIds = await filesSectionRef.value?.saveFiles() ?? []
+  model.value.files = await filesSectionRef.value?.saveAll() ?? []
   
   emit('submit')
 }

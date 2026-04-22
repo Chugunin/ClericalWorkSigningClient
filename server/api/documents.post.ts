@@ -6,9 +6,9 @@ import type {CreateDocumentRequestData} from "#shared/types/contracts/requests/d
 
 export default defineEventHandler(async (event): Promise<ApiResponse<Document[] | Document>> => {
     const body = await readBody<{
-        action?: 'filter' | 'create'
+        action?: 'create' | 'filter'
         document?: Document
-        filter?: DocumentFilters | null
+        filters?: DocumentFilters | null
     }>(event)
 
     if (body?.action === 'create') {
@@ -39,7 +39,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse<Document[] 
         '/api/GetDocuments',
         {
             method: 'POST',
-            body: body?.filter ?? null,
+            body: body?.filters ?? null,
         },
     )
 

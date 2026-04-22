@@ -5,6 +5,11 @@ export interface DocumentFormSigner {
     roleId: number
 }
 
+export interface DocumentFormFile {
+    fileEntryId: string //Guid
+    typeId: number
+}
+
 export interface DocumentFormModel {
     name?: string
     date?: DateValue
@@ -13,5 +18,5 @@ export interface DocumentFormModel {
     originId?: number
     executorId?: number
     signerIds?: DocumentFormSigner[]
-    fileEntryIds?: string[] //Guid
+    files?: DocumentFormFile[] 
 }

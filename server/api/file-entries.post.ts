@@ -1,6 +1,6 @@
 ﻿import { externalApi } from '../utils/external-api'
 import type { ApiResponse } from '~~/shared/types/api/api-response'
-import {FileEntry} from "#shared/types/contracts/responses/file-entries/file-entry";
+import type {FileEntry} from "#shared/types/contracts/responses/file-entries/file-entry";
 
 export default defineEventHandler(async (event): Promise<ApiResponse<FileEntry>> => {
     const formData = await readMultipartFormData(event)

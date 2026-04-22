@@ -35,8 +35,8 @@ const filters = shallowReactive<DocumentFilters>({
 
 const filtersChanged = computed(() => {
   return (filters.searchText?.length ?? 0) !== 0
-      || filters.statusIds.length !== 0
-      || filters.executorIds.length !== 0
+      || filters.statusIds?.length !== 0
+      || filters.executorIds?.length !== 0
       || filters.dateSince != null
       || filters.dateTill != null
 })

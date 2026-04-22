@@ -18,7 +18,7 @@ const createDocumentLabel = 'Новый документ'
     <main class="min-h-0 flex-1 overflow-hidden">
 
       <UDashboardGroup
-          storage="local"
+          storage="cookie"
           storage-key="main-dashboard-layout"
           class="h-full overflow-hidden"
       >

@@ -1,10 +1,6 @@
 <script setup lang="ts">
-import type {Document} from '#shared/types/contracts/responses/documents/document'
-import type {DocumentFormModel} from '~/types/documents/document-form-model'
-import {validateCreateForm} from "~/components/documents/create/validateCreateForm";
-import {formatDate, formatDateToISO} from "~/utils/date";
-import type {CreateDocumentRequestData} from "#shared/types/contracts/requests/documents/create-document-request-data";
-import {createNewDocument} from "~/components/documents/create/createNewDocument";
+import type {DocumentFormModel} from '~/types/documents/create/form-model'
+import {formatDate} from "~/utils/date";
 
 definePageMeta({
   layout: 'documents-create-layout'
@@ -42,7 +38,7 @@ const isSubmitting = ref(false)
 async function handleSubmit() {
   toast.clear()
 
-  const messages = validateCreateForm(model)
+  const messages = validateFormDocument(model)
 
   toast.showMany(messages, 5000, true)
 
@@ -52,11 +48,11 @@ async function handleSubmit() {
   try {
     isSubmitting.value = true
 
-    const documentResponse = await createNewDocument(model)
-
+    const document = await saveFormDocument(model)
+    
     toast.show(
         {
-          text: `Документ ${documentResponse.Name} от ${formatDate(documentResponse.CreatedDate)} создан`,
+          text: `Документ ${document.Name} от ${formatDate(document.CreatedDate)} создан`,
           level: "success"
         }
         , 3000

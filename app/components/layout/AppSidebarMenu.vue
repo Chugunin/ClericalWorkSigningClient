@@ -12,36 +12,10 @@ const props = withDefaults(defineProps<{
 
 const menuItems = computed<NavigationMenuItem[][]>(() => [[
   {
-    search: "SigningControl",
-    label: 'Контроль согласования',
-    icon: 'i-lucide-network',
-    to: '/documents/control/',
-    tooltip: props.collapsed ? {text: 'Контроль согласования'} : false,
-  },
-  {
-    search: "Signing",
-    label: 'Согласование документов',
-    icon: 'i-lucide-signature',
-    badge: props.pendingSigningCount > 0
-        ? {
-          label: String(props.pendingSigningCount),
-          color: 'warning',
-          variant: 'soft',
-        }
-        : undefined,
-    chip: props.collapsed && props.pendingSigningCount > 0
-        ? {
-          color: 'warning',
-          inset: true,
-        }
-        : false,
-    tooltip: props.collapsed ? {text: 'Согласование документов'} : false,
-  },
-  {
-    search: "MyDocuments",
-    label: 'Мои документы',
+    search: "Private",
+    label: 'Личная страница',
     icon: 'i-lucide-user-round',
-    to: '/',
+    to: '/documents/private',
     badge: props.myDocumentsCount > 0
         ? {
           label: String(props.myDocumentsCount),
@@ -56,6 +30,32 @@ const menuItems = computed<NavigationMenuItem[][]>(() => [[
         }
         : false,
     tooltip: props.collapsed ? {text: 'Мои документы'} : false,
+  },
+  {
+    search: "Signing",
+    label: 'Согласование',
+    icon: 'i-lucide-signature',
+    badge: props.pendingSigningCount > 0
+        ? {
+          label: String(props.pendingSigningCount),
+          color: 'warning',
+          variant: 'soft',
+        }
+        : undefined,
+    chip: props.collapsed && props.pendingSigningCount > 0
+        ? {
+          color: 'warning',
+          inset: true,
+        }
+        : false,
+    tooltip: props.collapsed ? {text: 'Согласование'} : false,
+  },
+  {
+    search: "SigningControl",
+    label: 'Контроль согласования',
+    icon: 'i-lucide-network',
+    to: '/documents/control/',
+    tooltip: props.collapsed ? {text: 'Контроль согласования'} : false,
   }
 ]])
 

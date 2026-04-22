@@ -1,4 +1,4 @@
-import type {ApiResponse} from '~~/shared/types/api/api-response'
+import type {ApiResponse} from '#shared/types/api/api-response'
 import type {DictionariesResponse} from '#shared/types/contracts/responses/dictionaries/dictionaries-response'
 
 export async function useDictionaries() {

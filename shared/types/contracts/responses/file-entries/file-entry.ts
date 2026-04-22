@@ -6,3 +6,4 @@
     MimeType?: string;
     StatusId: number;
 }
+

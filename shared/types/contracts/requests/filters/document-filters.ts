@@ -5,6 +5,6 @@ export interface DocumentFilters {
     searchText?: string
     dateSince?: DateValue
     dateTill?: DateValue
-    statusIds: number[]
-    executorIds: number[]
+    statusIds?: number[]
+    executorIds?: number[]
 }

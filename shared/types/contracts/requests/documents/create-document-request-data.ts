@@ -20,7 +20,7 @@ export interface Comment{
 }
 
 export interface File{
-    Path: string;
+    FileEntryId: string;
     TypeId: number;
 }
 

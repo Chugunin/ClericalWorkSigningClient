@@ -3,7 +3,7 @@ import type {ApiResponse} from "#shared/types/api/api-response";
 import type {Document} from "#shared/types/contracts/responses/documents/document";
 import type {FileEntry} from "#shared/types/contracts/responses/file-entries/file-entry";
 
-export async function saveFile(file: File) {
+export async function saveFileEntry(file: File) {
     
     const formData = new FormData()
     formData.append('file', file)

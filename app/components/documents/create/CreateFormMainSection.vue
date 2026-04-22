@@ -1,12 +1,8 @@
 <script setup lang="ts">
 
 import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
-import type {PersonRightType} from "#shared/types/contracts/responses/dictionaries/person-right-type";
-import type {PersonRoleType} from "#shared/types/contracts/responses/dictionaries/person-role-type";
-import type {PersonDecisionType} from "#shared/types/contracts/responses/dictionaries/person-decision-type";
 import type {DocumentOriginType} from "#shared/types/contracts/responses/dictionaries/document-origin-type";
-import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
-import type {DocumentFormModel} from "~/types/documents/document-form-model";
+import type {DocumentFormModel} from "~/types/documents/create/form-model";
 
 const model = defineModel<DocumentFormModel>({required: true})
 
@@ -36,7 +32,7 @@ const executorItems = computed(() =>
       class="min-h-0 w-full flex-1"
       :ui="{
         root: 'flex h-full min-h-0 flex-col overflow-hidden',
-        body: 'min-h-0 flex-1 overflow-auto'
+        body: 'min-h-0 flex-1'
       }"
   >
     <template #header>
