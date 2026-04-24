@@ -54,7 +54,7 @@ const menuItems = computed<NavigationMenuItem[][]>(() => [[
     search: "SigningControl",
     label: 'Контроль согласования',
     icon: 'i-lucide-network',
-    to: '/documents/control/',
+    to: '/documents/control',
     tooltip: props.collapsed ? {text: 'Контроль согласования'} : false,
   }
 ]])

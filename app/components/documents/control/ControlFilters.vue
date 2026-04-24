@@ -1,6 +1,8 @@
 <script setup lang="ts">
 
 import type {DocumentFilters} from "#shared/types/contracts/requests/filters/document-filters";
+import type {DateValue} from "@internationalized/date";
+import {formatDateToISO} from "~/utils/date";
 
 interface OptionItem {
   label: string
@@ -8,6 +10,17 @@ interface OptionItem {
 }
 
 const model = defineModel<DocumentFilters>({required: true});
+
+const dateSince = ref<DateValue | undefined>()
+const dateTill = ref<DateValue | undefined>()
+
+watch(dateSince, () => {
+  model.value.DateSince = formatDateToISO(dateSince.value)
+})
+
+watch(dateTill, () => {
+  model.value.DateTill = formatDateToISO(dateTill.value)
+})
 
 const props = withDefaults(defineProps<{
   statusOptions: OptionItem[]
@@ -23,10 +36,10 @@ const emit = defineEmits<{
   reset: []
 }>();
 
-function getSelectMenuToolTipText(origins: OptionItem[], values: number[]) {
-  if (origins.length !== 0 && values.length !== 0)
+function getSelectMenuToolTipText(origins: OptionItem[], values: number[] | undefined) {
+  if (origins?.length !== 0 && values?.length !== 0)
     return origins
-        .filter(o => values.includes(o.value))
+        .filter(o => values!.includes(o.value))
         .map(o => `[${o.label}]`)
         .join(', ');
 
@@ -34,11 +47,11 @@ function getSelectMenuToolTipText(origins: OptionItem[], values: number[]) {
 }
 
 const statusesTooltipText = computed(() => {
-  return getSelectMenuToolTipText(props.statusOptions, model.value.statusIds);
+  return getSelectMenuToolTipText(props.statusOptions, model.value.StatusIds);
 });
 
 const executorsTooltipText = computed(() => {
-  return getSelectMenuToolTipText(props.executorOptions, model.value.executorIds);
+  return getSelectMenuToolTipText(props.executorOptions, model.value.ExecutorIds);
 });
 
 </script>
@@ -63,10 +76,10 @@ const executorsTooltipText = computed(() => {
     <div class="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
 
       <UFormField label="Поиск" class="p-2 min-w-0">
-        <UChip :show="model.searchText?.length !== 0" class="w-full min-w-0">
-          <UTooltip :text="model.searchText ?? 'Пусто'" :content="{ side: 'bottom' }">
+        <UChip :show="model.SearchText?.length !== 0" class="w-full min-w-0">
+          <UTooltip :text="model.SearchText ?? 'Пусто'" :content="{ side: 'bottom' }">
             <UiAppTextInput
-                v-model="model.searchText"
+                v-model="model.SearchText"
                 variant="outline"
                 class="w-full min-w-0"
                 icon="i-lucide-search"
@@ -77,10 +90,10 @@ const executorsTooltipText = computed(() => {
       </UFormField>
 
       <UFormField label="Статус" class="p-2 min-w-0">
-        <UChip :show="model.statusIds?.length !== 0" class="w-full min-w-0">
+        <UChip :show="model.StatusIds?.length !== 0" class="w-full min-w-0">
           <UTooltip :text="statusesTooltipText" :content="{ side: 'bottom' }" arrow>
             <USelectMenu
-                v-model="model.statusIds"
+                v-model="model.StatusIds"
                 :items="props.statusOptions"
                 multiple
                 clear
@@ -102,10 +115,10 @@ const executorsTooltipText = computed(() => {
       </UFormField>
 
       <UFormField label="Исполнитель" class="p-2 min-w-0">
-        <UChip :show="model.executorIds?.length !== 0" class="w-full min-w-0">
+        <UChip :show="model.ExecutorIds?.length !== 0" class="w-full min-w-0">
           <UTooltip :text="executorsTooltipText" :content="{ side: 'bottom' }" arrow>
             <USelectMenu
-                v-model="model.executorIds"
+                v-model="model.ExecutorIds"
                 :items="props.executorOptions"
                 multiple
                 clear
@@ -127,15 +140,15 @@ const executorsTooltipText = computed(() => {
       </UFormField>
 
       <UFormField label="Дата с" class="p-2 min-w-0">
-        <UChip :show="model.dateSince != null" class="w-full min-w-0">
-          <UiAppDatePicker v-model="model.dateSince" variant="outline" class="w-full min-w-0"
+        <UChip :show="!!dateSince" class="w-full min-w-0">
+          <UiAppDatePicker v-model="dateSince" variant="outline" class="w-full min-w-0"
                            popover-content-class="z-[60] documents-control-filters-floating"/>
         </UChip>
       </UFormField>
 
       <UFormField label="Дата по" class="p-2 min-w-0">
-        <UChip :show="model.dateTill != null" class="w-full min-w-0">
-          <UiAppDatePicker v-model="model.dateTill" variant="outline" class="w-full min-w-0"
+        <UChip :show="!!dateTill" class="w-full min-w-0">
+          <UiAppDatePicker v-model="dateTill" variant="outline" class="w-full min-w-0"
                            popover-content-class="z-[60] documents-control-filters-floating"/>
         </UChip>
       </UFormField>

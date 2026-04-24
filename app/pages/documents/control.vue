@@ -26,19 +26,19 @@ const {
 } = await useDictionaries()
 
 const filters = shallowReactive<DocumentFilters>({
-  searchText: '',
-  dateSince: undefined,
-  dateTill: undefined,
-  statusIds: [],
-  executorIds: [],
+  SearchText: '',
+  DateSince: undefined,
+  DateTill: undefined,
+  StatusIds: [],
+  ExecutorIds: [],
 })
 
 const filtersChanged = computed(() => {
-  return (filters.searchText?.length ?? 0) !== 0
-      || filters.statusIds?.length !== 0
-      || filters.executorIds?.length !== 0
-      || filters.dateSince != null
-      || filters.dateTill != null
+  return (filters.SearchText?.length ?? 0) !== 0
+      || filters.StatusIds?.length !== 0
+      || filters.ExecutorIds?.length !== 0
+      || !!filters.DateSince
+      || !!filters.DateTill
 })
 
 const statusItems = computed(() =>
@@ -105,11 +105,11 @@ const hasError = computed(() =>
 )
 
 function resetFilters() {
-  filters.searchText = ''
-  filters.dateSince = undefined
-  filters.dateTill = undefined
-  filters.statusIds = []
-  filters.executorIds = []
+  filters.SearchText = ''
+  filters.DateSince = undefined
+  filters.DateTill = undefined
+  filters.StatusIds = []
+  filters.ExecutorIds = []
 }
 
 async function refreshDocuments() {

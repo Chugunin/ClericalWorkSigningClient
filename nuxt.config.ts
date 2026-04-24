@@ -7,6 +7,16 @@ export default defineNuxtConfig({
     devtools: {
         enabled: true
     },
+    vite: {
+        optimizeDeps: {
+            include: [
+                '@vue/devtools-core',
+                '@vue/devtools-kit',
+                '@vueuse/core',
+                '@internationalized/date',
+            ]
+        }
+    },
     /*devServer: {
         host: '0.0.0.0',
         port: 3000,

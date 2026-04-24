@@ -45,7 +45,7 @@ async function requestDocuments(filters?: DocumentFilters) {
             method: 'POST',
             body: {
                 action: 'filter',
-                filter: filters,
+                filters: filters,
             },
         })
         : await $fetch<ApiResponse<Document[]>>('/api/documents')

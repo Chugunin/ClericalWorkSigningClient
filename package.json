@@ -14,6 +14,7 @@
     "@nuxt/icon": "^2.2.1",
     "@nuxt/ui": "^4.5.0",
     "@pinia/nuxt": "^0.11.3",
+    "chart.js": "^4.5.1",
     "jsonwebtoken": "^9.0.3",
     "lucide": "^0.576.0",
     "nuxt": "^4.2.2",

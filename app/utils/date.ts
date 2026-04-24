@@ -1,4 +1,4 @@
-import {CalendarDate, type DateValue, getLocalTimeZone, today} from '@internationalized/date'
+import {CalendarDate, type DateValue, parseDate, getLocalTimeZone, today} from '@internationalized/date'
 
 export function formatDate(value: string | Date | null | undefined): string {
     if (!value) return ''
@@ -24,8 +24,8 @@ export function formatCalendarDate(value: DateValue | null | undefined): string 
     return `${day}.${month}.${year}`
 }
 
-export function formatDateToISO(value: DateValue | null | undefined): string {
-    if (!value) return ''
+export function formatDateToISO(value: DateValue | null | undefined): string | undefined {
+    if (!value) return undefined
 
     const day = String(value.day).padStart(2, '0')
     const month = String(value.month).padStart(2, '0')
