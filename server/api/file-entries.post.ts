@@ -30,7 +30,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse<FileEntry>>
 
     const fileEntry = await externalApi<FileEntry>(
         event,
-        '/api/files/SaveFile',
+        '/api/file/SaveFile',
         {
             method: 'POST',
             body: forwardedFormData,

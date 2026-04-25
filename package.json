@@ -10,6 +10,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@egjs/vue3-infinitegrid": "^4.13.0",
+    "@fancyapps/ui": "^6.1.13",
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/ui": "^4.5.0",

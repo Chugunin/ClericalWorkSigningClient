@@ -35,6 +35,7 @@ const menuItems = computed<NavigationMenuItem[][]>(() => [[
     search: "Signing",
     label: 'Согласование',
     icon: 'i-lucide-signature',
+    to: '/documents/signing',
     badge: props.pendingSigningCount > 0
         ? {
           label: String(props.pendingSigningCount),

@@ -17,10 +17,10 @@ export default defineNuxtConfig({
             ]
         }
     },
-    /*devServer: {
+    devServer: {
         host: '0.0.0.0',
         port: 3000,
-    },*/
+    },
     ssr: true,
     typescript: {
       strict: true,

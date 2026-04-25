@@ -20,6 +20,12 @@ const emit = defineEmits<{
   ]
 }>()
 
+const itemsAmount = computed(() =>
+    props.items
+        .filter(x => !props.hiddenStatusIds.includes(x.statusId))
+        .map(x => x.count)
+        .reduce((a, b) => a + b, 0))
+
 const colorMode = useColorMode()
 const colorProbeRef = ref<HTMLElement | null>(null)
 const legendFontColor = ref('currentColor')
@@ -28,7 +34,7 @@ const canvasRef = ref<HTMLCanvasElement | null>(null)
 let chart: Chart<'pie'> | null = null
 
 const chartData = computed<ChartData<'pie'>>(() => ({
-  labels: props.items.map(x => x.label),
+  labels: props.items.map(x => `${x.label} (${x.count})`),
   datasets: [
     {
       label: 'Документы',
@@ -67,15 +73,18 @@ const chartOptions: ChartOptions<'pie'> = {
           label: item.label,
           index,
         })
-      }
+      },
     },
     tooltip: {
       callbacks: {
+        title(context) {
+          return ''
+        },
         label(context) {
           const label = context.label ?? ''
-          const value = context.parsed ?? 0
+          //const value = context.parsed ?? 0
 
-          return `${label}: ${value}`
+          return `${label}`
         }
       }
     }
@@ -106,7 +115,7 @@ watch(
     () => {
       syncHiddenStatuses(true)
     },
-    { deep: true }
+    {deep: true}
 )
 
 function renderChart() {
@@ -192,6 +201,7 @@ onBeforeUnmount(() => {
   />
 
   <div class="relative w-full h-full min-h-[260px]">
+    <div class="w-full items-center text-center">Всего: {{ itemsAmount }}</div>
     <canvas ref="canvasRef"/>
   </div>
 

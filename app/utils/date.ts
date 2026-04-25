@@ -1,5 +1,22 @@
 import {CalendarDate, type DateValue, parseDate, getLocalTimeZone, today} from '@internationalized/date'
 
+export const MinimalDate: DateValue = new CalendarDate(2000, 1, 1);
+export const MaximalDate: DateValue = getTodayDateValue();
+
+export type DateRange = {
+    start: DateValue
+    end: DateValue
+} | undefined
+
+export const Periods = [
+    {label: 'День', value: 'day'},
+    {label: 'Неделя', value: 'week'},
+    {label: 'Месяц', value: 'month'},
+    {label: 'Всё время', value: 'allTime'},
+] as const
+
+export type PeriodValue = typeof Periods[number]['value']
+
 export function formatDate(value: string | Date | null | undefined): string {
     if (!value) return ''
 
