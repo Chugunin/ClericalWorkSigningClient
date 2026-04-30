@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DocumentsCreatePage from '~/pages/documents/create.vue'
 
 const open = defineModel<boolean>('open', {required: true})
 
@@ -56,7 +55,7 @@ function openInNewTab() {
         </div>
 
         <div class="flex min-h-0 flex-1 flex-col overflow-hidden p-4">
-          <DocumentsCreatePage v-if="open" @closeContainer="closeModal"/>
+          <DocumentsCreateScreen v-if="open" @closeContainer="closeModal"/>
         </div>
         
       </div>

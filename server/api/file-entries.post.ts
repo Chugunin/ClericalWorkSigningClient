@@ -1,5 +1,5 @@
 ﻿import { externalApi } from '../utils/external-api'
-import type { ApiResponse } from '~~/shared/types/api/api-response'
+import type { ApiResponse } from '#shared/types/api/api-response'
 import type {FileEntry} from "#shared/types/contracts/responses/file-entries/file-entry";
 
 export default defineEventHandler(async (event): Promise<ApiResponse<FileEntry>> => {
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse<FileEntry>>
 
     const fileEntry = await externalApi<FileEntry>(
         event,
-        '/api/file/SaveFile',
+        '/api/files/SaveFileEntry',
         {
             method: 'POST',
             body: forwardedFormData,

@@ -6,23 +6,20 @@ const props = defineProps<{
   popoverContentClass?: string
 }>()
 
-const targetDate = defineModel<DateValue | undefined>();
-
-const minDate: DateValue = new CalendarDate(2000, 1, 1);
-const maxDate: DateValue = getTodayDateValue();
-
-function onResetClick() {
-  targetDate.value = undefined;
-}
+const model = defineModel<DateValue | undefined>();
 
 function onTodayClick() {
-  targetDate.value = getTodayDateValue();
+  model.value = getTodayDateValue()
+}
+
+function onResetClick() {
+  model.value = undefined
 }
 
 </script>
 
 <template>
-  <UInputDate v-model="targetDate">
+  <UInputDate v-model="model">
 
     <template #leading>
 
@@ -46,9 +43,9 @@ function onTodayClick() {
           <div class="flex flex-col">
 
             <UCalendar
-                v-model="targetDate"
-                :min-value="minDate"
-                :max-value="maxDate"
+                v-model="model"
+                :min-value="MinimalDate"
+                :max-value="MaximalDate"
                 variant="solid"
                 class="p-2">
             </UCalendar>
