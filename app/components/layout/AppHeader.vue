@@ -8,6 +8,8 @@ const emit = defineEmits<{
   toggleSidebar: []
 }>()
 
+const authStore = useAuthStore()
+
 </script>
 
 <template>
@@ -33,7 +35,7 @@ const emit = defineEmits<{
           trailing-icon="i-lucide-square-arrow-right-exit"
           variant="solid"
           color="error"
-          @click=""/>
+          @click="authStore.logout()"/>
     </template>
 
   </UDashboardNavbar>

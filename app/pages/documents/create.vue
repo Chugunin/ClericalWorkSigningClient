@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 definePageMeta({
   layout: 'documents-create-layout'
 })
@@ -6,6 +7,7 @@ definePageMeta({
 useHead({
   title: 'Новый документ'
 })
+
 </script>
 
 <template>

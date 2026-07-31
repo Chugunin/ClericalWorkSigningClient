@@ -3,6 +3,7 @@
 useHead({
   title: 'Контроль согласования'
 })
+
 </script>
 
 <template>
