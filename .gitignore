@@ -225,3 +225,8 @@ dist
 docs/_book
 test/
 
+#repomix
+.repomixignore
+repomix.config.json
+repomix-output*
+

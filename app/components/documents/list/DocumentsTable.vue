@@ -1,11 +1,8 @@
 <script setup lang="ts">
 
 import type {TableColumn} from '@nuxt/ui'
-import type {Document} from "#shared/types/contracts/responses/documents/document";
-import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
-import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
-import type {Department} from "#shared/types/contracts/responses/dictionaries/department";
-import {UButton} from "#components";
+import type { Document, DocumentStatusType, Person, Department } from '#shared/types'
+import {UButton} from "#components"
 
 const props = withDefaults(defineProps<{
   documents: Document[]

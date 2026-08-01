@@ -1,88 +1,46 @@
-﻿import type {DocumentFormModel} from "~/types/documents/create/form-model";
-import type {CreateDocumentRequestData} from "#shared/types/contracts/requests/documents/create-document-request-data";
-import type {Document} from "#shared/types/contracts/responses/documents/document";
+﻿import { ref } from 'vue'
+import { DocumentsApi } from '~/api/documents.api'
+import type { CreateDocumentRequestData, Document } from '#shared/types'
 
-export function validateFormDocument(model: DocumentFormModel): AppToastMessage[] {
-    const messages: AppToastMessage[] = []
+export const useFormDocuments = () => {
+    const isSubmitting = ref(false)
+    const error = ref<string | null>(null)
 
-    if (!model.name?.trim()) {
-        messages.push({text: 'Укажите название документа', level: 'error'})
+    // Предположим, у вас есть глобальный toast для уведомлений (Nuxt UI)
+    const toast = useToast()
+
+    const submitDocument = async (payload: CreateDocumentRequestData): Promise<Document | null> => {
+        isSubmitting.value = true
+        error.value = null
+
+        try {
+            const createdDocument = await DocumentsApi.create(payload)
+
+            toast.add({
+                title: 'Успех',
+                description: `Документ "${createdDocument.Name}" успешно создан!`,
+                color: 'primary'
+            })
+
+            return createdDocument
+        } catch (err: any) {
+            error.value = err.message || 'Произошла ошибка при создании документа'
+
+            toast.add({
+                title: 'Ошибка',
+                description: error.value!,
+                color: 'error'
+            })
+
+            return null
+        } finally {
+            isSubmitting.value = false
+        }
     }
 
-    if (!model.date) {
-        messages.push({text: 'Укажите дату документа', level: 'error'})
+    return {
+        submitDocument,
+        isSubmitting,
+        error
     }
-
-    if (!model.executorId) {
-        messages.push({text: 'Укажите исполнителя документа', level: 'error'})
-    }
-
-    if (!model.originId) {
-        messages.push({text: 'Укажите тип документа', level: 'error'})
-    }
-
-    if (!model.signerIds || model.signerIds.length == 0) {
-        messages.push({text: 'Укажите с кем документ согласовывается', level: 'error'})
-    }
-
-    if (!model.files?.length) {
-        messages.push({text: 'Прикрепите файлы к документу', level: 'error'})
-    }
-    
-    else if (!model.files.some(f => f.typeId === 1))
-    {
-        messages.push({text: 'Не выбран основной файл документа', level: 'error'})    
-    }
-
-    /*else {
-        messages.push({text: model.signerIds.map(s => `[${s.signerId} - ${s.roleId}]`).join(", "), level: "info"})
-    }*/
-
-    if (!model.description) {
-        messages.push({text: 'Укажите описание документа', level: 'warning'})
-    }
-
-    return messages
-}
-
-export async function saveFormDocument(model: DocumentFormModel): Promise<Document> {
-    const executorRecord = model.executorId
-        ? [{
-            PersonId: model.executorId,
-            RoleId: 1,
-            DecisionId: 1,
-        }]
-        : []
-
-    const signerRecords = model.signerIds
-        ? model.signerIds.map(s => ({
-            PersonId: s.signerId,
-            RoleId: s.roleId,
-            DecisionId: 1,
-        }))
-        : []
-
-    const files = model.files
-        ? model.files.map(f => ({
-            FileEntryId: f.fileEntryId,
-            TypeId: f.typeId,
-        }))
-        : []
-
-    const documentRequest: CreateDocumentRequestData = {
-        Name: model.name!.trim(),
-        CreatedDate: formatDateToISO(model.date),
-        Description: model.description?.trim() || undefined,
-        OriginId: model.originId,
-        Comments: [],
-        Files: files,
-        Records: [...executorRecord, ...signerRecords],
-    }
-
-    const document = await createDocument(documentRequest)
-
-    if (!document)
-        throw new Error('Не удалось создать документ')
-
-    return document
 }

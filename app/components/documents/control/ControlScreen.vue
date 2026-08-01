@@ -1,25 +1,22 @@
 ﻿<script setup lang="ts">
 
 import {onClickOutside} from '@vueuse/core'
-import type {Document} from "#shared/types/contracts/responses/documents/document";
-import type {DocumentFilters} from "#shared/types/contracts/requests/filters/document-filters";
-import type {DocumentStatusType} from "#shared/types/contracts/responses/dictionaries/document-status-type";
-import type {Person} from "#shared/types/contracts/responses/dictionaries/person";
-import type {Department} from "#shared/types/contracts/responses/dictionaries/department";
+import type { Document, DocumentFilters, DocumentStatusType, Person, Department } from '#shared/types'
+
+import { useDictionariesStore } from '~/stores/dictionaries.store'
+import { useDocuments } from '~/composables/api/useDocuments'
+
+const dictionariesStore = useDictionariesStore()
+
+if (!dictionariesStore.isLoaded) {
+  dictionariesStore.fetchDictionaries()
+}
 
 const filtersOpen = ref(false)
 const filtersButtonRef = ref<HTMLElement | null>(null)
 const filtersPanelRef = ref<HTMLElement | null>(null)
 
-const {documents, status: documentsStatus, error: documentsError, refresh} = await useDocuments()
-
-const {
-  departments,
-  persons,
-  statusTypes,
-  status: dictionariesStatus,
-  error: dictionariesError
-} = await useDictionaries()
+const { documents, isLoading: isDocumentsLoading, error: documentsError, refresh } = useDocuments()
 
 const filters = shallowReactive<DocumentFilters>({
   SearchText: '',
@@ -37,37 +34,31 @@ const filtersChanged = computed(() => {
       || !!filters.DateTill
 })
 
-const statusItems = computed(() =>
-    statusTypes.value.map(item => ({
-      label: item.Description ?? item.Name ?? `#${item.Id}`,
-      value: item.Id
-    }))
-)
+const statusItems = computed(() => dictionariesStore.documentStatusTypes.map(item => ({
+  label: item.Description ?? item.Name ?? `#${item.Id}`,
+  value: item.Id
+})))
 
-const executorItems = computed(() =>
-    persons.value.map(item => ({
-      label: `${item.Name}`,
-      value: item.Id
-    }))
-)
+const executorItems = computed(() => dictionariesStore.persons.map(item => ({
+  label: `${item.Name}`,
+  value: item.Id
+})))
 
-const departmentItems = computed(() =>
-    departments.value.map(item => ({
-      label: item.Name,
-      value: item.Id
-    }))
-)
+const departmentItems = computed(() => dictionariesStore.departments.map(item => ({
+  label: item.Name,
+  value: item.Id
+})))
 
 const statusById = computed<Map<number, DocumentStatusType>>(
-    () => new Map(statusTypes.value.map(item => [item.Id, item]))
+    () => new Map(dictionariesStore.documentStatusTypes.map(item => [item.Id, item]))
 )
 
 const personById = computed<Map<number, Person>>(
-    () => new Map(persons.value.map(item => [item.Id, item]))
+    () => new Map(dictionariesStore.persons.map(item => [item.Id, item]))
 )
 
 const departmentById = computed<Map<number, Department>>(
-    () => new Map(departments.value.map(item => [item.Id, item]))
+    () => new Map(dictionariesStore.departments.map(item => [item.Id, item]))
 )
 
 const page = ref(1)
@@ -92,13 +83,8 @@ watch(totalDocuments, (total) => {
   }
 })
 
-const isLoading = computed(() =>
-    documentsStatus.value === 'pending' || dictionariesStatus.value === 'pending'
-)
-
-const hasError = computed(() =>
-    Boolean(documentsError.value || dictionariesError.value)
-)
+const isLoading = computed(() => isDocumentsLoading.value || dictionariesStore.isLoading)
+const hasError = computed(() => Boolean(documentsError.value || dictionariesStore.error))
 
 function resetFilters() {
   filters.SearchText = ''

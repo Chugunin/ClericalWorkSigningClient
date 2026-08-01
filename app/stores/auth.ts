@@ -1,68 +1,56 @@
 ﻿import {defineStore} from 'pinia'
+import {useDictionariesStore} from './dictionaries.store' // <-- ДОБАВИТЬ ИМПОРТ
+import {AuthApi} from '~/api/auth.api' // <-- Используем API из Шага 2
 
-export const useAuthStore = defineStore('auth', () => {
-    
-    // Сессионная кука (нет maxAge)
-    const token = useCookie<string | null>('auth_token')
-    const user = ref<any>(null)
-    const loading = ref(false)
+export const useAuthStore = defineStore('auth', {
+    state: () => ({
+        user: null,
+        token: useCookie('auth_token').value || null,
+    }),
 
-    const login = async (credentials: any) => {
-        try {
-            loading.value = true
-            
-            // Дергаем наш Nuxt-сервер (он пойдет в .NET)
-            const res = await $fetch<any>('/api/auth/login', {
-                method: 'POST',
-                body: credentials
-            })
+    actions: {
+        async login(credentials: any) {
+            try {
+                const response = await AuthApi.login(credentials)
+                this.token = response.Token
+                const cookie = useCookie('auth_token')
+                cookie.value = this.token
 
-            console.log('Ответ от логина:', res)
-
-            // Сохраняем токен в куку (сразу доступна и клиенту, и серверу)
-            token.value = res.Token
-            
-            if (!res.Token) {
-                throw new Error('Токен не найден')
+                await this.fetchUser()
+            } catch (error) {
+                throw error
             }
+        },
 
-            // Сразу загружаем профиль
-            await fetchUser()
-            
-        } catch (error) {
-            console.error('Ошибка входа', error)
-            throw error
-        } finally {
-            loading.value = false
+        async fetchUser() {
+            if (!this.token) return
+
+            try {
+                this.user = await AuthApi.getMe(this.token)
+
+                // --> ДОБАВЛЕНО: Загружаем словари сразу после получения профиля пользователя
+                const dictionariesStore = useDictionariesStore()
+                await dictionariesStore.fetchDictionaries()
+                // <-- 
+
+            } catch (error) {
+                this.logout()
+            }
+        },
+
+        logout() {
+            this.user = null
+            this.token = null
+            const cookie = useCookie('auth_token')
+            cookie.value = null
+
+            // --> ДОБАВЛЕНО: Очищаем кэш словарей при выходе из системы, 
+            // чтобы другой пользователь за этим же ПК их не увидел
+            const dictionariesStore = useDictionariesStore()
+            dictionariesStore.clearDictionaries()
+            // <--
+
+            navigateTo('/login')
         }
     }
-
-    const fetchUser = async () => {
-        if (!token.value) return
-
-        try {
-            user.value = await $fetch<any>('/api/auth/me', {
-                // Явно прикрепляем токен, чтобы не ждать, пока обновится кука в браузере
-                headers: {
-                    Authorization: `Bearer ${token.value}`
-                }
-            })
-        } catch (error) {
-            // Если токен протух или невалиден — очищаем всё
-            token.value = null
-            user.value = null
-            throw error
-        }
-    }
-
-    const logout = () => {
-        token.value = null
-        user.value = null
-        navigateTo('/login')
-    }
-
-    // Геттеры
-    const isAuthenticated = computed(() => !!token.value)
-
-    return {token, user, loading, isAuthenticated, login, fetchUser, logout}
 })

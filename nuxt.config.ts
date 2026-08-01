@@ -71,4 +71,13 @@ export default defineNuxtConfig({
         collections: ['lucide'],
         fallbackToApi: false,
     },
+
+    components: { 
+        dirs: 
+        [
+            { 
+                path: '~/components/ui', pathPrefix: true 
+            }
+        ] 
+    }
 })

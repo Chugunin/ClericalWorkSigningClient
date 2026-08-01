@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
-import type {DocumentFilters} from "#shared/types/contracts/requests/filters/document-filters";
-import type {DateValue} from "@internationalized/date";
-import {formatDateToISO} from "~/utils/date";
+import type { DocumentFilters } from '#shared/types'
+import type {DateValue} from "@internationalized/date"
+import {formatDateToISO} from "~/utils/date"
 
 interface OptionItem {
   label: string

@@ -1,0 +1,18 @@
+# Add patterns to ignore here, one per line
+# Example:
+# *.log
+# tmp/
+
+#hidden and config files
+.git
+.idea
+.nuxt
+.env
+.gitignore
+.repomixignore
+repomix.config.json
+
+#node.js common files
+node_modules
+package-lock.json
+

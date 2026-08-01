@@ -1,11 +1,13 @@
 import type { Department } from './department'
-import type { DocumentFileType } from './document-file-type'
-import type { DocumentOriginType } from './document-origin-type'
-import type { DocumentStatusType } from './document-status-type'
+import type {
+    DocumentFileType,
+    DocumentOriginType,
+    DocumentStatusType,
+    PersonDecisionType,
+    PersonRightType,
+    PersonRoleType,
+} from './dictionary-item'
 import type { Person } from './person'
-import type { PersonDecisionType } from './person-decision-type'
-import type { PersonRightType } from './person-right-type'
-import type { PersonRoleType } from './person-role-type'
 
 export interface DictionariesResponse {
     DocumentFileTypes: DocumentFileType[]

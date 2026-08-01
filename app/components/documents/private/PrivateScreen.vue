@@ -31,7 +31,7 @@ const executorItems = computed(() =>
     persons.value.map(item => (
         {
           label: `${item.Name}`,
-          value: item.Id,
+          value: item.id,
         })) as ExecutorItem[],
 )
 
@@ -39,7 +39,7 @@ const selectedExecutorId = ref<number>()
 
 const statusTypeById = computed(() =>
     Object.fromEntries(
-        statusTypes.value.map(status => [status.Id, status])
+        statusTypes.value.map(status => [status.id, status])
     )
 )
 

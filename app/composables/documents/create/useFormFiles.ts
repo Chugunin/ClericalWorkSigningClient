@@ -1,6 +1,6 @@
 ﻿import {computed, onBeforeUnmount, ref, watch, type Ref} from 'vue'
-import type {FileEntry} from "#shared/types/contracts/responses/file-entries/file-entry";
 import type {DocumentFormFile} from "~/types/documents/create/form-model";
+import type {FileEntry} from "#shared/types";
 
 export interface UseFilesOptions {
     saveFile?: (file: File) => Promise<FileEntry>

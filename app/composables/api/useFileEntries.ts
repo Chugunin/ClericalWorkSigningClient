@@ -1,19 +1,28 @@
-﻿import type {ApiResponse} from "#shared/types/api/api-response";
-import type {FileEntry} from "#shared/types/contracts/responses/file-entries/file-entry";
+﻿import {ref} from 'vue'
+import {FilesApi} from '~/api/files.api'
+import type {FileEntry} from '#shared/types'
 
-export async function saveFileEntry(file: File) {
-    
-    const formData = new FormData()
-    formData.append('file', file)
-    
-    const response = await $fetch<ApiResponse<FileEntry>>('/api/file-entries', {
-        method: 'POST',
-        body: formData,
-    })
+export const useFileEntries = () => {
+    const isUploading = ref(false)
+    const uploadError = ref<string | null>(null)
 
-    if (!response.success) {
-        throw new Error(response.error ?? 'File saving failed')
+    const uploadFile = async (file: File): Promise<FileEntry | null> => {
+        isUploading.value = true
+        uploadError.value = null
+
+        try {
+            return await FilesApi.saveEntry(file)
+        } catch (err: any) {
+            uploadError.value = err.message || 'Ошибка при загрузке файла'
+            return null
+        } finally {
+            isUploading.value = false
+        }
     }
 
-    return response.data
+    return {
+        uploadFile,
+        isUploading,
+        uploadError
+    }
 }

@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import type {DocumentFormModel} from '~/types/documents/create/form-model'
 import {formatDate} from '~/utils/date'
+import { useDictionariesStore } from '~/stores/dictionaries.store'
+
+const dictionariesStore = useDictionariesStore()
+// Проверяем, загружены ли словари
+if (!dictionariesStore.isLoaded) {
+  dictionariesStore.fetchDictionaries()
+}
 
 const emit = defineEmits<{
   closeContainer: []
