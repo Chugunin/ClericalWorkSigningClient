@@ -1,4 +1,5 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
+import { DocumentSigningScreen } from '~/modules/document-signing'
 
 useHead({
   title: 'Согласование документов'
@@ -7,7 +8,7 @@ useHead({
 </script>
 
 <template>
-  <DocumentsSigningScreen />
+  <DocumentSigningScreen />
 </template>
 
 <style scoped>

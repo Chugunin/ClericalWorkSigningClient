@@ -1,5 +1,3 @@
-﻿export default defineEventHandler(async (event) => {
-    
-    // externalApi сам подхватит куку auth_token и передаст в .NET
-    return await externalApi(event, '/api/auth/me')
-})
+import { authGateway } from '#server/modules/auth/auth.gateway'
+
+export default defineEventHandler(event => authGateway.getCurrentUser(event))

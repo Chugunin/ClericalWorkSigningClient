@@ -1,0 +1,12 @@
+app/api/api-client.ts
+app/api/auth.api.ts
+app/api/dictionaries.api.ts
+app/api/documents.api.ts
+app/api/files.api.ts
+server/api/auth/login.post.ts
+server/api/auth/me.get.ts
+server/api/dictionaries.get.ts
+server/api/documents.get.ts
+server/api/documents.post.ts
+server/api/file-entries.post.ts
+server/api/physical-file/[fileId].get.ts

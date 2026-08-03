@@ -1,9 +1,6 @@
-﻿export default defineEventHandler(async (event) => {
-    const body = await readBody(event)
-    
-    // Отправляем логин/пароль в .NET
-    return await externalApi(event, '/api/auth/login', {
-        method: 'POST',
-        body
-    }) // Должен вернуть { token: "..." }
+import type { LoginRequest } from '#shared/contracts/auth/auth.contracts'
+import { authGateway } from '#server/modules/auth/auth.gateway'
+
+export default defineEventHandler(async event => {
+  return authGateway.login(event, await readBody<LoginRequest>(event))
 })

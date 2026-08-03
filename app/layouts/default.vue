@@ -1,18 +1,23 @@
 <script setup lang="ts">
+import { useApplicationBootstrap } from '~/app/bootstrap'
+import { DocumentCreateModal } from '~/modules/document-create'
+import { AppHeader, AppSidebarMenu } from '~/shared/layout'
 
 const sidebarCollapsed = ref(false)
 const createModalOpen = ref(false)
 const createDocumentLabel = 'Новый документ'
+const bootstrap = useApplicationBootstrap()
 
 </script>
 
 <template>
   <div class="flex h-screen flex-col overflow-hidden bg-default">
     
-    <LayoutAppHeader 
+    <AppHeader 
         class="shrink-0"
         :sidebar-collapsed="sidebarCollapsed"
         @toggle-sidebar="sidebarCollapsed = !sidebarCollapsed"
+        @logout="bootstrap.logout()"
     />
 
     <main class="min-h-0 flex-1 overflow-hidden">
@@ -34,7 +39,7 @@ const createDocumentLabel = 'Новый документ'
             class="border-r border-default"
         >
           
-          <LayoutAppSidebarMenu :collapsed="sidebarCollapsed"/>
+          <AppSidebarMenu :collapsed="sidebarCollapsed"/>
 
           <template #footer>
             <div class="flex w-full justify-center px-2">
@@ -74,7 +79,7 @@ const createDocumentLabel = 'Новый документ'
     
   </div>
   
-  <ModalCreateDocumentModal v-model:open="createModalOpen"/>
+  <DocumentCreateModal v-model:open="createModalOpen"/>
   
 </template>
 

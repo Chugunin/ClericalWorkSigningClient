@@ -2,8 +2,8 @@ export default defineNuxtConfig({
     telemetry: false,
 
     runtimeConfig: {
-        apiSecret: process.env.NUXT_API_SECRET,
-        signingApi: process.env.NUXT_SIGNING_API,
+        apiSecret: '',
+        signingApi: '',
     },
     
     compatibilityDate: '2026-04-13',
@@ -75,9 +75,14 @@ export default defineNuxtConfig({
     components: { 
         dirs: 
         [
-            { 
-                path: '~/components/ui', pathPrefix: true 
-            }
+            {
+                path: '~/shared/ui',
+                pathPrefix: false,
+            },
+            {
+                path: '~/shared/layout',
+                pathPrefix: false,
+            },
         ] 
     }
 })

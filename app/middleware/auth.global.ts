@@ -1,33 +1,25 @@
-﻿import {useAuthStore} from "~/stores/auth";
+import { useApplicationBootstrap } from '~/app/bootstrap'
+import { useAuthStore } from '~/modules/auth'
 
 export default defineNuxtRouteMiddleware(async (to) => {
-    const authStore = useAuthStore()
+  const authStore = useAuthStore()
+  const bootstrap = useApplicationBootstrap()
 
-    // Если есть токен, но профиль еще не загружен (например, после F5)
-    // Загружаем профиль ДО того, как отрендерится страница (SSR)
-    if (authStore.token && !authStore.user) {
-        try {
-            await authStore.fetchUser()
-        }
-        catch {
-            authStore.logout()
-        }
+  if (authStore.token && !authStore.user) {
+    try {
+      await bootstrap.initialize()
     }
-
-    const publicRoutes = new Set([
-        '/login',
-    ])
-
-    // Считаем страницу /login публичной
-    const isPublicRoute = publicRoutes.has(to.path)
-
-    // Если нет токена и страница не публичная -> на логин
-    if (!authStore.isAuthenticated && !isPublicRoute) {
-        return navigateTo('/login')
+    catch {
+      await bootstrap.logout()
     }
+  }
 
-    // Если авторизован и идет на логин -> на главную
-    if (authStore.isAuthenticated && isPublicRoute) {
-        return navigateTo('/')
-    }
+  const publicRoutes = new Set(['/login'])
+  const isPublicRoute = publicRoutes.has(to.path)
+
+  if (!authStore.isAuthenticated && !isPublicRoute)
+    return navigateTo('/login')
+
+  if (authStore.isAuthenticated && isPublicRoute)
+    return navigateTo('/')
 })

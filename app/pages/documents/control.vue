@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { DocumentControlScreen } from '~/modules/document-control'
 
 useHead({
   title: 'Контроль согласования'
@@ -7,7 +8,7 @@ useHead({
 </script>
 
 <template>
-  <DocumentsControlScreen />
+  <DocumentControlScreen />
 </template>
 
 <style scoped>

@@ -1,16 +1,11 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
+import { PersonalDashboardScreen } from '~/modules/personal-dashboard'
 
 useHead({
-  title: 'Личная страница'
+  title: 'Личная страница',
 })
-
 </script>
 
 <template>
-  <DocumentsPrivateScreen />
-
+  <PersonalDashboardScreen />
 </template>
-
-<style scoped>
-
-</style>

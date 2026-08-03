@@ -1,0 +1,6 @@
+app/pages/documents/control.vue
+app/pages/documents/create.vue
+app/pages/documents/private.vue
+app/pages/documents/signing.vue
+app/pages/index.vue
+app/pages/login.vue

@@ -1,75 +1,70 @@
-# Nuxt Minimal Starter
+# ClericalWorkSigningClient
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Клиент системы согласования документов на Nuxt 4. Проект организован как модульный монолит: каждый бизнес-сценарий принадлежит одному модулю, межмодульные зависимости проходят только через публичные `index.ts`, а архитектурные ограничения проверяются автоматически.
 
-## Setup
+## Требования
 
-Make sure to install dependencies:
+- Node.js: `>=22 <25`;
+- npm: `>=10`;
+- доступ к настроенному npm registry и внешнему signing API через Nuxt server routes.
+
+Версия Node зафиксирована в `.nvmrc`.
+
+## Запуск
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
-
-Build the application for production:
+Production build:
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+npm run preview
 ```
 
-Locally preview production build:
+## Проверки
+
+Перед commit и merge request обязательно выполнять:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npm run check
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Команда последовательно запускает toolchain-check, архитектурные и контрактные тесты, unit-тесты, TypeScript, ESLint и production build.
+
+Для быстрой проверки архитектурных границ:
+
+```bash
+npm run check:architecture
+```
+
+## Структура
+
+```text
+app/
+├── app/              # application bootstrap и orchestration
+├── modules/          # бизнес-модули
+├── shared/           # общая инфраструктура, UI и технические helpers
+├── pages/            # тонкие route adapters
+├── layouts/
+└── middleware/
+server/
+├── api/              # тонкие H3 endpoints
+├── modules/          # gateway внешнего API по предметным областям
+└── shared/           # общий server transport и error mapping
+shared/contracts/     # сериализуемые client/server DTO
+```
+
+## Архитектурная документация
+
+Начальная точка: [`docs/architecture/ARCHITECTURE.md`](docs/architecture/ARCHITECTURE.md).
+
+- [`MODULE_MAP.md`](docs/architecture/MODULE_MAP.md) — владельцы функциональности и разрешённые зависимости;
+- [`HOW_TO_ADD_MODULE.md`](docs/architecture/HOW_TO_ADD_MODULE.md) — создание бизнес-модуля;
+- [`HOW_TO_ADD_PAGE.md`](docs/architecture/HOW_TO_ADD_PAGE.md) — создание маршрута;
+- [`PUBLIC_API_RULES.md`](docs/architecture/PUBLIC_API_RULES.md) — правила `index.ts` и импортов;
+- [`DEVELOPMENT_WORKFLOW.md`](docs/architecture/DEVELOPMENT_WORKFLOW.md) — локальный и CI workflow;
+- [`CODE_REVIEW_CHECKLIST.md`](docs/architecture/CODE_REVIEW_CHECKLIST.md) — обязательный review checklist;
+- [`MODULAR_ARCHITECTURE_ROADMAP.md`](docs/architecture/MODULAR_ARCHITECTURE_ROADMAP.md) — план и журнал миграции.

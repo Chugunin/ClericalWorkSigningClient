@@ -7,26 +7,51 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "check:toolchain": "node scripts/check-toolchain.mjs",
+    "check:architecture": "npm run test:architecture && npm run test:bootstrap && npm run test:auth && npm run test:dictionaries && npm run test:file-viewer && npm run test:document-create && npm run test:document-registry && npm run test:document-control && npm run test:document-signing && npm run test:personal-dashboard && npm run test:contracts-dto && npm run test:server-api && npm run test:cleanup && npm run test:documentation && node scripts/check-architecture.mjs",
+    "typecheck": "nuxt prepare && vue-tsc -b --noEmit",
+    "lint": "eslint .",
+    "test:unit": "vitest run --passWithNoTests tests/unit",
+    "test:contracts": "npm run test:contracts-dto",
+    "check": "npm run check:toolchain && npm run check:architecture && npm run test:contracts && npm run test:unit && npm run typecheck && npm run lint && npm run build",
+    "test:architecture": "node --test tests/architecture/*.test.mjs",
+    "test:bootstrap": "node --experimental-strip-types --test tests/bootstrap/*.test.mjs",
+    "test:auth": "node --experimental-strip-types --test tests/auth/*.test.mjs",
+    "test:dictionaries": "node --experimental-strip-types --test tests/dictionaries/*.test.mjs",
+    "test:file-viewer": "node --experimental-strip-types --test tests/file-viewer/*.test.mjs",
+    "test:document-create": "node --experimental-strip-types --test tests/document-create/*.test.mjs",
+    "test:document-registry": "node --experimental-strip-types --test tests/document-registry/*.test.mjs",
+    "test:document-control": "node --experimental-strip-types --test tests/document-control/*.test.mjs",
+    "test:document-signing": "node --experimental-strip-types --test tests/document-signing/*.test.mjs",
+    "test:personal-dashboard": "node --experimental-strip-types --test tests/personal-dashboard/*.test.mjs",
+    "test:contracts-dto": "node --test tests/contracts-dto/*.test.mjs",
+    "test:server-api": "node --experimental-strip-types --test tests/server-api/*.test.mjs",
+    "test:cleanup": "node --test tests/cleanup/*.test.mjs",
+    "test:documentation": "node --test tests/documentation/*.test.mjs"
   },
   "dependencies": {
-    "@egjs/vue3-infinitegrid": "^4.13.0",
-    "@fancyapps/ui": "^6.1.13",
     "@nuxt/fonts": "^0.14.0",
     "@nuxt/icon": "^2.2.1",
     "@nuxt/ui": "^4.5.0",
     "@pinia/nuxt": "^0.11.3",
     "chart.js": "^4.5.1",
-    "jsonwebtoken": "^9.0.3",
-    "lucide": "^0.576.0",
     "nuxt": "^4.2.2",
     "reka-ui": "^2.9.5",
     "tailwindcss": "^4.2.1",
-    "vue": "^3.5.25",
-    "vue-router": "^4.6.3"
+    "vue": "^3.5.25"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.95",
-    "@types/jsonwebtoken": "^9.0.10"
+    "@nuxt/eslint": "^1.9.0",
+    "@vue/test-utils": "^2.4.6",
+    "eslint": "^9.39.0",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "vue-tsc": "^3.3.9"
+  },
+  "engines": {
+    "node": ">=22 <25",
+    "npm": ">=10"
   }
 }
