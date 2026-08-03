@@ -1,0 +1,67 @@
+{
+  "$schema": "https://repomix.com/schemas/latest/schema.json",
+  "input": {
+    "maxFileSize": 52428800
+  },
+  "include": [
+    "shared/**/*"
+  ],
+  "output": {
+    "style": "markdown",
+    "filePathStyle": "target-relative",
+    "parsableStyle": false,
+    "compress": false,
+    "fileSummary": true,
+    "directoryStructure": true,
+    "files": true,
+    "removeComments": false,
+    "removeEmptyLines": false,
+    "showLineNumbers": false,
+    "truncateBase64": true,
+    "topFilesLength": 20,
+    "includeFullDirectoryStructure": true,
+    "git": {
+      "sortByChanges": false,
+      "includeDiffs": false,
+      "includeLogs": false
+    },
+    "filePath": "NotebookLM/04_SHARED.md"
+  },
+  "ignore": {
+    "useGitignore": true,
+    "useDotIgnore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "**/.git/**",
+      "**/node_modules/**",
+      "**/.nuxt/**",
+      "**/.output/**",
+      "**/dist/**",
+      "**/coverage/**",
+      "**/bin/**",
+      "**/obj/**",
+      "**/.idea/**",
+      "**/.vscode/**",
+      "**/*.png",
+      "**/*.jpg",
+      "**/*.jpeg",
+      "**/*.gif",
+      "**/*.svg",
+      "**/*.ico",
+      "**/*.woff",
+      "**/*.woff2",
+      "**/*.dll",
+      "**/*.exe",
+      "**/*.zip",
+      "**/package-lock.json",
+      "**/pnpm-lock.yaml",
+      "**/yarn.lock"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  },
+  "tokenCount": {
+    "encoding": "o200k_base"
+  }
+}

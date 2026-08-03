@@ -1,28 +1,52 @@
-﻿import {ref} from 'vue'
-import {FilesApi} from '~/api/files.api'
-import type {FileEntry} from '#shared/types'
+﻿import { ref } from 'vue'
+
+import { FilesApi } from '~/api/files.api'
+
+import { useApiError } from '~/composables/api/useApiError'
+import { useLoading } from '~/composables/api/useLoading'
+
+import type { FileEntry } from '#shared/types'
 
 export const useFileEntries = () => {
-    const isUploading = ref(false)
+
+    const loader = useLoading()
+    const apiError = useApiError()
+
     const uploadError = ref<string | null>(null)
 
-    const uploadFile = async (file: File): Promise<FileEntry | null> => {
-        isUploading.value = true
+    const uploadFile = async (
+        file: File,
+    ): Promise<FileEntry | null> => {
+
         uploadError.value = null
 
-        try {
-            return await FilesApi.saveEntry(file)
-        } catch (err: any) {
-            uploadError.value = err.message || 'Ошибка при загрузке файла'
-            return null
-        } finally {
-            isUploading.value = false
-        }
+        return loader.execute(async () => {
+
+            try {
+
+                return await FilesApi.saveEntry(file)
+
+            }
+            catch (error) {
+
+                uploadError.value = apiError.getMessage(error)
+
+                return null
+
+            }
+
+        })
+
     }
 
     return {
+
         uploadFile,
-        isUploading,
-        uploadError
+
+        isUploading: loader.loading,
+
+        uploadError,
+
     }
+
 }

@@ -1,46 +1,63 @@
 ﻿import { ref } from 'vue'
 import { DocumentsApi } from '~/api/documents.api'
-import type { CreateDocumentRequestData, Document } from '#shared/types'
+import { useApiError } from '~/composables/api/useApiError'
+import { useLoading } from '~/composables/api/useLoading'
+import { useAppToast } from '~/composables/ui/useAppToast'
+
+import type {
+    CreateDocumentRequestData,
+    Document,
+} from '#shared/types'
 
 export const useFormDocuments = () => {
-    const isSubmitting = ref(false)
+
+    const loader = useLoading()
+    const apiError = useApiError()
+    const toast = useAppToast()
+
     const error = ref<string | null>(null)
 
-    // Предположим, у вас есть глобальный toast для уведомлений (Nuxt UI)
-    const toast = useToast()
+    const submitDocument = async (
+        payload: CreateDocumentRequestData,
+    ): Promise<Document | null> => {
 
-    const submitDocument = async (payload: CreateDocumentRequestData): Promise<Document | null> => {
-        isSubmitting.value = true
         error.value = null
 
-        try {
-            const createdDocument = await DocumentsApi.create(payload)
+        return loader.execute(async () => {
 
-            toast.add({
-                title: 'Успех',
-                description: `Документ "${createdDocument.Name}" успешно создан!`,
-                color: 'primary'
-            })
+            try {
 
-            return createdDocument
-        } catch (err: any) {
-            error.value = err.message || 'Произошла ошибка при создании документа'
+                const created = await DocumentsApi.create(payload)
 
-            toast.add({
-                title: 'Ошибка',
-                description: error.value!,
-                color: 'error'
-            })
+                toast.success(
+                    `Документ "${created.Name}" успешно создан.`,
+                )
 
-            return null
-        } finally {
-            isSubmitting.value = false
-        }
+                return created
+
+            }
+            catch (e) {
+
+                error.value = apiError.getMessage(e)
+
+                toast.error(error.value)
+
+                return null
+
+            }
+
+        })
+
     }
 
     return {
+
         submitDocument,
-        isSubmitting,
-        error
+
+        isSubmitting: loader.loading,
+
+        error,
+
     }
+
 }

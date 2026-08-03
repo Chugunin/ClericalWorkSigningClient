@@ -1,14 +1,11 @@
 ﻿import { apiClient } from './api-client'
 import type { Document, DocumentFilters, CreateDocumentRequestData } from '#shared/types'
+import {hasActiveFilters} from "~/utils/filter.utils";
 
 export const DocumentsApi = {
     async getList(filters?: DocumentFilters | null): Promise<Document[]> {
-        const hasActiveFilters = filters && Object.values(filters).some(value => {
-            if (Array.isArray(value)) return value.length > 0
-            return value !== null && value !== undefined && value !== ''
-        })
 
-        if (hasActiveFilters) {
+        if (hasActiveFilters(filters)) {
             return await apiClient<Document[]>('/api/documents', {
                 method: 'POST',
                 body: {

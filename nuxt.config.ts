@@ -1,9 +1,9 @@
 export default defineNuxtConfig({
     telemetry: false,
-    
+
     runtimeConfig: {
-        apiSecret: process.env.NUXT_API_SECRET || 'default', // NUXT_API_SECRET
-        signingApi: process.env.NUXT_SIGNING_API || 'default', // NUXT_SIGNING_API
+        apiSecret: process.env.NUXT_API_SECRET,
+        signingApi: process.env.NUXT_SIGNING_API,
     },
     
     compatibilityDate: '2026-04-13',

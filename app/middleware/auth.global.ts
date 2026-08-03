@@ -6,11 +6,20 @@ export default defineNuxtRouteMiddleware(async (to) => {
     // Если есть токен, но профиль еще не загружен (например, после F5)
     // Загружаем профиль ДО того, как отрендерится страница (SSR)
     if (authStore.token && !authStore.user) {
-        await authStore.fetchUser()
+        try {
+            await authStore.fetchUser()
+        }
+        catch {
+            authStore.logout()
+        }
     }
 
+    const publicRoutes = new Set([
+        '/login',
+    ])
+
     // Считаем страницу /login публичной
-    const isPublicRoute = to.path === '/login'
+    const isPublicRoute = publicRoutes.has(to.path)
 
     // Если нет токена и страница не публичная -> на логин
     if (!authStore.isAuthenticated && !isPublicRoute) {

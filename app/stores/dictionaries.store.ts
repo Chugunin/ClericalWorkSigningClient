@@ -1,5 +1,8 @@
 ﻿import { defineStore } from 'pinia'
+
 import { DictionariesApi } from '~/api/dictionaries.api'
+import { useApiError } from '~/composables/api/useApiError'
+
 import type { DictionariesResponse } from '#shared/types'
 
 export const useDictionariesStore = defineStore('dictionaries', {
@@ -10,10 +13,8 @@ export const useDictionariesStore = defineStore('dictionaries', {
     }),
 
     getters: {
-        // Проверка, загружены ли данные
         isLoaded: (state) => state.data !== null,
 
-        // Удобные геттеры для прямого доступа к конкретным массивам (с фоллбеком на пустой массив)
         departments: (state) => state.data?.Departments ?? [],
         persons: (state) => state.data?.Persons ?? [],
         documentFileTypes: (state) => state.data?.DocumentFileTypes ?? [],
@@ -26,28 +27,41 @@ export const useDictionariesStore = defineStore('dictionaries', {
 
     actions: {
         async fetchDictionaries(force = false) {
-            // Если справочники уже в кэше и принудительное обновление не запрошено - просто выходим
-            if (this.isLoaded && !force) {
+
+            if (this.isLoaded && !force)
                 return
-            }
+
+            const apiError = useApiError()
 
             this.isLoading = true
             this.error = null
 
             try {
-                // Используем чистый API-клиент, который мы сделали на Шаге 2
+
                 this.data = await DictionariesApi.getAll()
-            } catch (err: any) {
-                this.error = err.message || 'Ошибка при загрузке справочников'
-                console.error('[DictionariesStore] Ошибка:', err)
-            } finally {
-                this.isLoading = false
+
             }
+            catch (error) {
+
+                this.error = apiError.getMessage(error)
+
+            }
+            finally {
+
+                this.isLoading = false
+
+            }
+
         },
 
         clearDictionaries() {
+
             this.data = null
             this.error = null
-        }
-    }
+            this.isLoading = false
+
+        },
+
+    },
+
 })
