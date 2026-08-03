@@ -1,20 +1,10 @@
-﻿import { apiClient } from './api-client'
+﻿import {
+    LoginRequest,
+    LoginResponse,
+    CurrentUser
+} from '#shared/types'
 
-export interface LoginRequest {
-    login: string
-    password: string
-}
-
-export interface LoginResponse {
-    token: string
-}
-
-export interface CurrentUser {
-    id: string
-    login: string
-    fullName: string
-    roles: string[]
-}
+import { apiClient } from './api-client'
 
 export const AuthApi = {
 
@@ -31,10 +21,17 @@ export const AuthApi = {
         )
     },
 
-    async getMe(): Promise<CurrentUser> {
+    async getMe(
+        token: string
+    ): Promise<CurrentUser> {
 
         return await apiClient<CurrentUser>(
-            '/api/auth/me'
+            '/api/auth/me',
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
         )
     }
 
