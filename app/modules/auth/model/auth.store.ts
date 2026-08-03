@@ -8,7 +8,10 @@ import type { CurrentUser, LoginRequest } from '#shared/contracts/auth/auth.cont
 
 export const useAuthStore = defineStore('auth', () => {
 
-    const tokenCookie = useCookie<string | null>('auth_token')
+    const tokenCookie = useCookie<string | null>('auth_token', {
+        sameSite: 'lax',
+        path: '/',
+    })
 
     const user = ref<CurrentUser | null>(null)
     const loading = ref(false)

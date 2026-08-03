@@ -64,7 +64,7 @@ async function onSubmit() {
             v-model="state.login"
             class="w-full max-w-sm"
             placeholder="Логин или Email"
-            icon="lucide-user"
+            icon="i-lucide-user"
             autocomplete="username"
             :disabled="authStore.loading"
           />
@@ -76,7 +76,7 @@ async function onSubmit() {
             class="w-full max-w-sm"
             type="password"
             placeholder="••••••••"
-            icon="lucide-key"
+            icon="i-lucide-key"
             autocomplete="current-password"
             :disabled="authStore.loading"
           />

@@ -33,3 +33,11 @@ test('route and middleware consume auth through its public API', () => {
   assert.match(source, /~\/modules\/auth['"]/)
   assert.doesNotMatch(source, /modules\/auth\/(?:api|components|lib|model)/)
 })
+
+test('login inputs use Nuxt UI icon names from the locally installed lucide collection', () => {
+  const source = read('app/modules/auth/components/AuthLoginScreen.vue')
+
+  assert.match(source, /icon="i-lucide-user"/)
+  assert.match(source, /icon="i-lucide-key"/)
+  assert.doesNotMatch(source, /icon="lucide-(?:user|key)"/)
+})

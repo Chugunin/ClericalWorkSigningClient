@@ -70,6 +70,13 @@ export default defineNuxtConfig({
         provider: 'server',
         collections: ['lucide'],
         fallbackToApi: false,
+        clientBundle: {
+            scan: true,
+            icons: [
+                'lucide:user',
+                'lucide:key',
+            ],
+        },
     },
 
     components: { 

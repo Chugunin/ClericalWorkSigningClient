@@ -61,3 +61,19 @@ test('server layer never imports client application modules', () => {
   ]
   for (const file of files) assert.doesNotMatch(read(file), /~\/modules|app\/modules/)
 })
+
+test('JSON BFF endpoints expose the shared ApiResponse envelope', () => {
+  for (const file of [
+    'server/api/auth/login.post.ts',
+    'server/api/auth/me.get.ts',
+    'server/api/dictionaries/index.get.ts',
+    'server/api/documents/index.get.ts',
+    'server/api/documents/index.post.ts',
+    'server/api/files/entries.post.ts',
+  ]) {
+    const source = read(file)
+    assert.match(source, /ApiResponse</, file)
+    assert.match(source, /success:\s*true/, file)
+    assert.match(source, /data:/, file)
+  }
+})
