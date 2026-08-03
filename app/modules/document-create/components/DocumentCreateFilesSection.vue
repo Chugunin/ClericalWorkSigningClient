@@ -1,17 +1,17 @@
 <script setup lang="ts">
 
-import type {DocumentFormFile, DocumentFormModel} from "../model/document-create-form.model";
-import type {DocumentFileType} from "#shared/contracts/dictionaries/dictionary-item.contract";
+/*import type {DocumentFormModel} from "../model/document-create-form.model";
+import type {DocumentFileType} from "#shared/contracts/dictionaries/dictionary-item.contract";*/
 import { getFileInfo, saveFileEntry } from '~/modules/file-viewer'
 import { useDocumentCreateFiles } from '../composables/useDocumentCreateFiles'
 
-const model = defineModel<DocumentFormModel>({required: true})
+/*const model = defineModel<DocumentFormModel>({required: true})
 
 const props = defineProps<{
   fileTypes: DocumentFileType[]
-}>()
+}>()*/
 
-const files = ref<File[]>([])
+const attachments = ref<File[]>([])
 
 const {
   mainFileKey,
@@ -24,7 +24,7 @@ const {
   clearAll,
   saveAll,
 
-} = useDocumentCreateFiles(files, {
+} = useDocumentCreateFiles(attachments, {
   saveFile: saveFileEntry,
 })
 
@@ -36,9 +36,9 @@ defineExpose({
 const fileUploadUi = computed(() => ({
   base: [
     'p-2 border-hidden focus:outline-none focus:ring-0 focus-visible:ring-0',
-    files.value.length ? 'justify-start' : 'justify-center items-center'
+    attachments.value.length ? 'justify-start' : 'justify-center items-center'
   ].join(' '),
-  root: files.value.length
+  root: attachments.value.length
       ? 'justify-start'
       : 'h-full justify-center items-center',
   files: 'md:grid-cols-2'
@@ -60,7 +60,7 @@ const fileUploadUi = computed(() => ({
       </template>
 
       <UFileUpload
-          v-model="files"
+          v-model="attachments"
           layout="grid"
           multiple
           :interactive="false"
@@ -72,7 +72,7 @@ const fileUploadUi = computed(() => ({
 
         <template #actions="{ open }">
 
-          <div v-if="!files?.length" class="flex flex-wrap gap-2">
+          <div v-if="!attachments?.length" class="flex flex-wrap gap-2">
             <UButton
                 icon="i-lucide-upload"
                 label="Добавить файлы"
@@ -128,7 +128,7 @@ const fileUploadUi = computed(() => ({
                     data-slot="image"
                     class="h-full w-full rounded-[inherit] object-cover"
                     :alt="file.name"
-                />
+                >
   
                 <UIcon
                     v-else

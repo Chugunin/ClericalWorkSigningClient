@@ -17,9 +17,11 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+
+defineProps<{
   title: string
 }>()
 
 const isOpen = defineModel<boolean>()
+
 </script>

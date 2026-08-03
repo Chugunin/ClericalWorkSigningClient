@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import * as locales from '@nuxt/ui/locale'
-import {shallowReadonly} from "vue";
+import * as locales from '@nuxt/ui/locale';
 
 useHead({
   titleTemplate: (titleChunk) =>

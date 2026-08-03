@@ -24,9 +24,9 @@ watch(dateTill, () => {
 })
 
 const props = withDefaults(defineProps<{
-  statusOptions: OptionItem[]
-  executorOptions: OptionItem[]
-  departmentOptions: OptionItem[]
+  statusOptions?: OptionItem[]
+  executorOptions?: OptionItem[]
+  departmentOptions?: OptionItem[]
 }>(), {
   statusOptions: () => [],
   executorOptions: () => [],
@@ -142,14 +142,16 @@ const executorsTooltipText = computed(() => {
 
       <UFormField label="Дата с" class="p-2 min-w-0">
         <UChip :show="!!dateSince" class="w-full min-w-0">
-          <AppDatePicker v-model="dateSince" variant="outline" class="w-full min-w-0"
+          <AppDatePicker
+v-model="dateSince" variant="outline" class="w-full min-w-0"
                            popover-content-class="z-[60] documents-control-filters-floating"/>
         </UChip>
       </UFormField>
 
       <UFormField label="Дата по" class="p-2 min-w-0">
         <UChip :show="!!dateTill" class="w-full min-w-0">
-          <AppDatePicker v-model="dateTill" variant="outline" class="w-full min-w-0"
+          <AppDatePicker
+v-model="dateTill" variant="outline" class="w-full min-w-0"
                            popover-content-class="z-[60] documents-control-filters-floating"/>
         </UChip>
       </UFormField>

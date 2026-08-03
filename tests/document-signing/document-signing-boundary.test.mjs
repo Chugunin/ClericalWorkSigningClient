@@ -42,3 +42,45 @@ test('signing module has no dependency on document-control', () => {
   ]
   for (const file of files) assert.doesNotMatch(read(file), /document-control/)
 })
+
+test('document-signing transport contracts stay outside the feature module', () => {
+  assert.equal(
+      existsSync(
+          new URL(
+              '../../shared/contracts/document-signing/pdf-signing.contracts.ts',
+              import.meta.url,
+          ),
+      ),
+      true,
+  )
+
+  assert.equal(
+      existsSync(
+          new URL(
+              '../../shared/contracts/document-signing/pdf-verification.contracts.ts',
+              import.meta.url,
+          ),
+      ),
+      true,
+  )
+
+  assert.equal(
+      existsSync(
+          new URL(
+              '../../shared/contracts/document-signing/certificate.contracts.ts',
+              import.meta.url,
+          ),
+      ),
+      true,
+  )
+
+  assert.equal(
+      existsSync(
+          new URL(
+              '../../app/modules/document-signing/contracts',
+              import.meta.url,
+          ),
+      ),
+      false,
+  )
+})

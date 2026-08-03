@@ -1,12 +1,9 @@
 <script setup lang="ts">
 import { AppThreePaneShell } from '~/shared/layout'
 
-import type {DocumentFormModel} from "../model/document-create-form.model";
-import type {DocumentOriginType} from "#shared/contracts/dictionaries/dictionary-item.contract";
-import type {DocumentFileType} from "#shared/contracts/dictionaries/dictionary-item.contract";
-import type {PersonRoleType} from "#shared/contracts/dictionaries/dictionary-item.contract";
+import type {DocumentFormModel} from "~/modules/document-create";
+import type {DocumentOriginType,DocumentFileType,PersonRoleType,DocumentStatusType} from "#shared/contracts/dictionaries/dictionary-item.contract";
 import type {Person} from "#shared/contracts/dictionaries/person.contract";
-import type {DocumentStatusType} from "#shared/contracts/dictionaries/dictionary-item.contract";
 import DocumentCreateFilesSection from './DocumentCreateFilesSection.vue'
 import DocumentCreateMainSection from './DocumentCreateMainSection.vue'
 import DocumentCreateSignersSection from './DocumentCreateSignersSection.vue'

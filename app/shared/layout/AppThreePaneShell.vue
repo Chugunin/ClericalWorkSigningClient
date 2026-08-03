@@ -38,7 +38,7 @@ const fallbackLayout = computed(() => {
       : normalizeLayout(props.defaultSizes.slice(0, 2))
 })
 
-const fallbackGridColumns = computed(() => {
+/*const fallbackGridColumns = computed(() => {
   const columns: string[] = []
 
   fallbackLayout.value.forEach((size, index) => {
@@ -52,7 +52,7 @@ const fallbackGridColumns = computed(() => {
   })
 
   return columns.join(' ')
-})
+})*/
 
 const isMounted = ref(false)
 const initialLayout = ref<number[]>([])

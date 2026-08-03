@@ -61,7 +61,7 @@ const executorItems = computed(() =>
             option-attribute="label"
             placeholder="Выберите тип документа"
             :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200', content: 'min-w-fit' }"
-            :searchInput="false"
+            :search-input="false"
             class="w-full"
             clear
         />

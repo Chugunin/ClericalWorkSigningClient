@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import type { FileViewerItem } from '../types/file-item'
 
-const model = defineModel<FileViewerItem | null>('modelValue')
+defineModel<FileViewerItem | null>('modelValue')
 
-const props = defineProps<{
+defineProps<{
   files: FileViewerItem[]
 }>()
 

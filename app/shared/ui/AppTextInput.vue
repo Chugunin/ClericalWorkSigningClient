@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {useClipboard} from '@vueuse/core';
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   placeholderText?: string
   resetVisible?: boolean
   copyVisible?: boolean

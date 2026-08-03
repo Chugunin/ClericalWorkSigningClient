@@ -115,7 +115,8 @@ onClickOutside(filtersPanelRef, () => {
         description="Проверь доступность API и попробуй обновить страницу."
     />
 
-    <UCard v-else
+    <UCard
+v-else
            class="min-h-0 flex-1"
            :ui="{
              root: 'relative min-h-0 flex h-full flex-col overflow-visible',

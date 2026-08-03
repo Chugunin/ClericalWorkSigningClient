@@ -2,7 +2,7 @@
 
 import type { PersonalDashboardCard } from '../types/personal-dashboard-card'
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   documentCards: PersonalDashboardCard[]
   loading?: boolean
 }>(), {
@@ -32,7 +32,8 @@ const props = withDefaults(defineProps<{
               от {{ documentCard.dateText }}
             </div>
 
-            <UBadge variant="solid" class="justify-center"
+            <UBadge
+variant="solid" class="justify-center"
                     :class="[documentCard.statusColor.bgClass, documentCard.statusColor.textClass]">
               <span class="font-bold text-sm">{{ documentCard.statusText }}</span>
             </UBadge>

@@ -1,4 +1,4 @@
-import {CalendarDate, type DateValue, parseDate, getLocalTimeZone, today} from '@internationalized/date'
+import {CalendarDate, type DateValue, getLocalTimeZone, today} from '@internationalized/date'
 
 export const MinimalDate: DateValue = new CalendarDate(2000, 1, 1);
 export const MaximalDate: DateValue = getTodayDateValue();

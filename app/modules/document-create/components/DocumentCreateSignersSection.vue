@@ -138,7 +138,8 @@ function syncSignerIdsWithModel() {
             <ul class="flex min-h-0 flex-col gap-2">
               <li v-for="signerItem in filteredSignerItems" :key="signerItem.value">
 
-                <div class="flex flex-row p-2 gap-2 items-center border border-accented rounded-lg"
+                <div
+class="flex flex-row p-2 gap-2 items-center border border-accented rounded-lg"
                      :class="[signerItem.isChecked ? 'border-primary' : 'border-accented']"
                      @click="toggleSignerItem(signerItem)"
                 >
@@ -147,7 +148,8 @@ function syncSignerIdsWithModel() {
                     {{ signerItem.label }}
                   </div>
 
-                  <USelectMenu v-model="signerItem.roleId"
+                  <USelectMenu
+v-model="signerItem.roleId"
                                :items="roleItems"
                                value-key="value"
                                label-key="label"

@@ -163,20 +163,15 @@ export function useDocumentCreateFiles(
         const currentFiles = files.value ?? []
 
         for (const currentFile of currentFiles) {
-
-            try {
-                const currentFileEntry = await options.saveFile(currentFile)
-                
-                if (currentFileEntry.Id) {
-                    fileEntries.push(
-                        {
-                            fileEntryId: currentFileEntry.Id,
-                            typeId: isMainFile(currentFile) ? 1 : 3
-                        })
-                }
-                
-            } catch (error) {
-                throw error
+            
+            const currentFileEntry = await options.saveFile(currentFile)
+            
+            if (currentFileEntry.Id) {
+                fileEntries.push(
+                    {
+                        fileEntryId: currentFileEntry.Id,
+                        typeId: isMainFile(currentFile) ? 1 : 3
+                    })
             }
         }
         

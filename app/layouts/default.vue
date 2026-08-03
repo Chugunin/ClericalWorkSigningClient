@@ -76,10 +76,10 @@ const bootstrap = useApplicationBootstrap()
       </UDashboardGroup>
 
     </main>
+
+    <DocumentCreateModal v-model:open="createModalOpen"/>
     
   </div>
-  
-  <DocumentCreateModal v-model:open="createModalOpen"/>
   
 </template>
 

@@ -33,7 +33,7 @@ onClickOutside(periodsPanelRef, () => {
   ignore: ['.periodPanelControl'],
 })
 
-async function selectPeriod(periodValue: PeriodValue) {
+/*async function selectPeriod(periodValue: PeriodValue) {
   isApplyingPeriod.value = true
 
   selectedPeriodValue.value = periodValue
@@ -42,11 +42,11 @@ async function selectPeriod(periodValue: PeriodValue) {
   await nextTick()
 
   isApplyingPeriod.value = false
-}
+}*/
 
-function isSelectedPeriod(periodValue: PeriodValue) {
+/*function isSelectedPeriod(periodValue: PeriodValue) {
   return selectedPeriodValue.value === periodValue
-}
+}*/
 
 function onDateRangeUpdate(value: DateRange) {
   dateRange.value = value

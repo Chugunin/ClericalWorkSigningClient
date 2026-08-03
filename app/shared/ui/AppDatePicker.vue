@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {CalendarDate, type DateValue} from '@internationalized/date'
+import type {DateValue} from '@internationalized/date'
 import { getTodayDateValue, MaximalDate, MinimalDate } from '~/shared/lib/date/date'
 
 const props = defineProps<{
@@ -47,8 +47,7 @@ function onResetClick() {
                 :min-value="MinimalDate"
                 :max-value="MaximalDate"
                 variant="solid"
-                class="p-2">
-            </UCalendar>
+                class="p-2"/>
 
             <USeparator orientation="horizontal" size="sm"/>
 

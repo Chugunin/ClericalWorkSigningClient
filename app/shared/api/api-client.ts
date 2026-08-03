@@ -11,6 +11,18 @@ export class ApiError extends Error {
     }
 }
 
+interface ApiClientErrorPayload {
+    data?: {
+        message?: string
+    }
+    message?: string
+    status?: number
+}
+
+function isApiClientErrorPayload(error: unknown): error is ApiClientErrorPayload {
+    return typeof error === 'object' && error !== null
+}
+
 export async function apiClient<T>(
     request: string,
     options?: Parameters<typeof $fetch>[1]
@@ -24,15 +36,20 @@ export async function apiClient<T>(
 
         return response.data
     }
-    catch (error: any) {
-        if (error instanceof ApiError)
+    catch (error: unknown) {
+        if (error instanceof ApiError) {
             throw error
+        }
 
-        throw new ApiError(
-            error?.data?.message ??
-            error?.message ??
-            'Network error',
-            error?.status
-        )
+        if (isApiClientErrorPayload(error)) {
+            throw new ApiError(
+                error.data?.message
+                ?? error.message
+                ?? 'Network error',
+                error.status
+            )
+        }
+
+        throw new ApiError('Network error')
     }
 }

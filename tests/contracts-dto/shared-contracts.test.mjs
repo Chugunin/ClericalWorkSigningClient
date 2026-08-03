@@ -14,7 +14,7 @@ function files(dir) {
 }
 
 test('shared contracts do not depend on frameworks or application modules', () => {
-  const forbidden = /from\s+['\"](?:vue|nuxt|pinia|@vue\/|@nuxt\/|#app|~\/|@\/)/
+  const forbidden = /from\s+['"](?:vue|nuxt|pinia|@vue\/|@nuxt\/|#app|~\/|@\/)/
   for (const file of files(contractsRoot).filter((file) => file.endsWith('.ts'))) {
     assert.doesNotMatch(readFileSync(file, 'utf8'), forbidden, relative(root, file))
   }
@@ -23,7 +23,7 @@ test('shared contracts do not depend on frameworks or application modules', () =
 test('legacy broad shared types barrel is removed', () => {
   assert.equal(existsSync(join(root, 'shared/types/index.ts')), false)
   for (const file of files(join(root, 'app')).concat(files(join(root, 'server'))).filter((file) => /\.(ts|vue)$/.test(file))) {
-    assert.doesNotMatch(readFileSync(file, 'utf8'), /#shared\/types(?:['\"]|\/)/, relative(root, file))
+    assert.doesNotMatch(readFileSync(file, 'utf8'), /#shared\/types(?:['"]|\/)/, relative(root, file))
   }
 })
 
@@ -42,7 +42,7 @@ test('API response and document filters remain serializable transport contracts'
   const filters = readFileSync(join(contractsRoot, 'documents/document-filters.contract.ts'), 'utf8')
   assert.match(api, /success: boolean/)
   assert.match(api, /data: T/)
-  assert.match(filters, /StatusIds\?: number\[\]/)
-  assert.match(filters, /ExecutorIds\?: number\[\]/)
+  assert.match(filters, /StatusIds\?: number\[]/)
+  assert.match(filters, /ExecutorIds\?: number\[]/)
   assert.doesNotMatch(filters, /DateValue|Ref<|ComputedRef/)
 })

@@ -70,8 +70,7 @@ const menuItems = computed<NavigationMenuItem[][]>(() => [[
       highlight
       tooltip
       :collapsed="collapsed"
-      class="w-full">
-  </UNavigationMenu>
+      class="w-full"/>
 </template>
 
 <style scoped>

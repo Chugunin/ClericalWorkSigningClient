@@ -77,11 +77,11 @@ const chartOptions: ChartOptions<'pie'> = {
     },
     tooltip: {
       callbacks: {
-        title(context) {
+        title(_context) {
           return ''
         },
-        label(context) {
-          const label = context.label ?? ''
+        label(_context) {
+          const label = _context.label ?? ''
           //const value = context.parsed ?? 0
 
           return `${label}`

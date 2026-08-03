@@ -10,8 +10,7 @@
           root: 'flex h-full min-h-0 flex-col overflow-hidden',
           body: 'min-h-0 flex-1 overflow-hidden'
         }"
-    >
-    </UCard>
+    />
   </div>
 </template>
 

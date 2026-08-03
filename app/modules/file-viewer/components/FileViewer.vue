@@ -9,6 +9,7 @@ const props = withDefaults(defineProps<{
   buttonLabel?: string
 }>(), {
   buttonLabel: 'Открыть',
+  fileName: '',
 })
 
 const toast = useToast()
