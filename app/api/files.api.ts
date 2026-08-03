@@ -1,27 +1,45 @@
 ﻿import { apiClient } from './api-client'
 import type { FileEntry } from '#shared/types'
 
+export interface PhysicalFileResponse {
+    url: string
+    mimeType: string
+}
+
 export const FilesApi = {
-    async saveEntry(file: File): Promise<FileEntry> {
+
+    async saveEntry(
+        file: File
+    ): Promise<FileEntry> {
+
         const formData = new FormData()
+
         formData.append('file', file)
 
-        return await apiClient<FileEntry>('/api/file-entries', {
-            method: 'POST',
-            body: formData
-        })
+        return await apiClient<FileEntry>(
+            '/api/file-entries',
+            {
+                method: 'POST',
+                body: formData
+            }
+        )
     },
 
-    async getPhysicalFile(fileId: string): Promise<{ url: string; mimeType: string }> {
-        const blob = await $fetch<Blob>(`/api/physical-file/${fileId}`, {
-            responseType: 'blob'
-        })
+    async getPhysicalFile(
+        fileId: string
+    ): Promise<PhysicalFileResponse> {
 
-        const url = URL.createObjectURL(blob)
+        const blob = await $fetch<Blob>(
+            `/api/physical-file/${fileId}`,
+            {
+                responseType: 'blob'
+            }
+        )
 
         return {
-            url,
+            url: URL.createObjectURL(blob),
             mimeType: blob.type
         }
     }
+
 }
