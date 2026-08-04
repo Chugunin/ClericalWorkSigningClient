@@ -15,7 +15,7 @@
 | `document-registry` | загрузка, фильтрация, сортировка и отображение списков документов | `dictionaries` только через public API, `shared/*` |
 | `document-create` | форма создания, подписанты, файлы формы, преобразование payload | `dictionaries`, `file-viewer` только через public API, `shared/*` |
 | `document-control` | экран и сценарий контроля согласования | `document-registry` через public API, `shared/*` |
-| `document-signing` | экран и сценарий согласования документа | фактически: `file-viewer` через public API и `shared/*`; `document-registry` — только при появлении подтверждённого списка документов |
+| `document-signing` | выбор документа, просмотр и подписание PDF, проверка подписей, управление сертификатом | `document-registry`, `file-viewer`, `auth` только через public API; `shared/*` |
 | `personal-dashboard` | личная панель, карточки и диаграммы | `document-registry` через public API, `shared/*` |
 | `file-viewer` | получение файлов, preview, gallery, освобождение URL | `shared/api`, `shared/contracts`, `shared/ui` |
 
@@ -194,6 +194,17 @@
 - Внутренние детали: transport API, filter predicate, local filter factory.
 - Текущие потребители: будущие `document-control` и `personal-dashboard` через public API.
 - Пагинация и сортировка пока принадлежат экранным сценариям; общий контракт не вводится без подтверждённого повторного поведения.
+
+
+## Фактический статус document-signing
+
+- Модуль расположен в `app/modules/document-signing`.
+- Public API: только `DocumentSigningScreen`.
+- Внутренние обязанности: выбор документа, PDF preview, геометрия штампа, browser API, проверка подписи и сертификаты.
+- Разрешённые зависимости: `document-registry`, `file-viewer`, `auth` только через public API, а также `shared`.
+- Server owner: `server/modules/document-signing/document-signing.gateway.ts`; endpoints остаются тонкими BFF adapters.
+- Статические GUID и legacy viewer удалены на Stage 20.10.
+- Сохранение подписанной версии и переход статуса не реализуются без подтверждённого backend-контракта.
 
 
 ## Реализованный модуль `document-control`

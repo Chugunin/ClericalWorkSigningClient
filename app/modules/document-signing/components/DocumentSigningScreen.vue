@@ -3,8 +3,11 @@ import { AppThreePaneShell } from '~/shared/layout'
 
 import DocumentSigningListSection from './DocumentSigningListSection.vue'
 import DocumentSigningMainSection from './DocumentSigningMainSection.vue'
+import { provideDocumentSigningSelection } from '../composables/useDocumentSigningSelection'
 
 const defaultPanelSizes = [25, 75, 0]
+
+provideDocumentSigningSelection()
 
 </script>
 

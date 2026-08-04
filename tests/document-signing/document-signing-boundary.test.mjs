@@ -7,7 +7,7 @@ const read = path => readFileSync(new URL(`../../${path}`, import.meta.url), 'ut
 test('document-signing exposes only its screen', () => {
   const publicApi = read('app/modules/document-signing/index.ts')
   assert.match(publicApi, /DocumentSigningScreen/)
-  assert.doesNotMatch(publicApi, /SigningViewerSection|signing-selection/)
+  assert.doesNotMatch(publicApi, /SigningViewerSection|signing-selection|DocumentSigningWorkspace/)
 })
 
 test('signing route is a thin adapter through public API', () => {
@@ -17,9 +17,9 @@ test('signing route is a thin adapter through public API', () => {
 })
 
 test('document-signing uses file-viewer only through its public API', () => {
-  const viewer = read('app/modules/document-signing/components/DocumentSigningViewerSection.vue')
-  assert.match(viewer, /from '~\/modules\/file-viewer'/)
-  assert.doesNotMatch(viewer, /~\/modules\/file-viewer\/(components|api|model|composables|lib)/)
+  const workspace = read('app/modules/document-signing/components/DocumentSigningWorkspace.vue')
+  assert.match(workspace, /from '~\/modules\/file-viewer'/)
+  assert.doesNotMatch(workspace, /~\/modules\/file-viewer\/(components|api|model|composables|lib)/)
 })
 
 test('signing screen owns local sections without legacy auto-imports', () => {
@@ -38,7 +38,9 @@ test('signing module has no dependency on document-control', () => {
     'app/modules/document-signing/components/DocumentSigningScreen.vue',
     'app/modules/document-signing/components/DocumentSigningListSection.vue',
     'app/modules/document-signing/components/DocumentSigningMainSection.vue',
-    'app/modules/document-signing/components/DocumentSigningViewerSection.vue',
+    'app/modules/document-signing/components/DocumentSigningWorkspace.vue',
+    'app/modules/document-signing/components/DocumentSignatureVerification.vue',
+    'app/modules/document-signing/components/DocumentSigningCertificate.vue',
   ]
   for (const file of files) assert.doesNotMatch(read(file), /document-control/)
 })

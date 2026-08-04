@@ -760,3 +760,8 @@ build
 - **Установка зависимостей:** внутренний registry среды проверки не содержит `@iconify-json/lucide`; прямой `registry.npmjs.org` недоступен по тайм-ауту.
 - **Не подтверждено в этой среде:** `nuxi typecheck`, ESLint и production build. Эти проверки должны быть выполнены в корпоративной CI-среде с настроенным npm proxy.
 - **Финальный отчёт:** `docs/architecture/FINAL_MIGRATION_REPORT.md`.
+
+
+## Current delivery journal
+
+- `STAGE20_DOCUMENT_SIGNING_INTEGRATION.md` — document-signing integration cycle.

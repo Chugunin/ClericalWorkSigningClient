@@ -68,3 +68,5 @@ shared/contracts/     # сериализуемые client/server DTO
 - [`DEVELOPMENT_WORKFLOW.md`](docs/architecture/DEVELOPMENT_WORKFLOW.md) — локальный и CI workflow;
 - [`CODE_REVIEW_CHECKLIST.md`](docs/architecture/CODE_REVIEW_CHECKLIST.md) — обязательный review checklist;
 - [`MODULAR_ARCHITECTURE_ROADMAP.md`](docs/architecture/MODULAR_ARCHITECTURE_ROADMAP.md) — план и журнал миграции.
+
+- [DOCUMENT_SIGNING.md](docs/architecture/DOCUMENT_SIGNING.md)

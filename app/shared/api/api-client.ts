@@ -17,6 +17,7 @@ interface ApiClientErrorPayload {
     }
     message?: string
     status?: number
+    statusCode?: number
 }
 
 function isApiClientErrorPayload(error: unknown): error is ApiClientErrorPayload {
@@ -46,7 +47,7 @@ export async function apiClient<T>(
                 error.data?.message
                 ?? error.message
                 ?? 'Network error',
-                error.status
+                error.status ?? error.statusCode
             )
         }
 

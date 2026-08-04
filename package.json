@@ -39,7 +39,8 @@
     "nuxt": "^4.2.2",
     "reka-ui": "^2.9.5",
     "tailwindcss": "^4.2.1",
-    "vue": "^3.5.25"
+    "vue": "^3.5.25",
+    "pdfjs-dist": "^5.4.149"
   },
   "devDependencies": {
     "@iconify-json/lucide": "^1.2.121",

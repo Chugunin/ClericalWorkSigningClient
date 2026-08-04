@@ -12,6 +12,7 @@ const requiredDocuments = [
   'docs/architecture/DEVELOPMENT_WORKFLOW.md',
   'docs/architecture/CODE_REVIEW_CHECKLIST.md',
   'docs/architecture/MODULAR_ARCHITECTURE_ROADMAP.md',
+  'docs/architecture/DOCUMENT_SIGNING.md',
 ]
 
 async function read(path) {
@@ -48,4 +49,13 @@ test('architecture guide documents both client and server dependency directions'
   assert.match(source, /pages \/ layouts \/ middleware/)
   assert.match(source, /server\/api → server\/modules → server\/shared/)
   assert.match(source, /shared\/contracts/)
+})
+
+
+test('document signing guide records public boundaries and backend limitations', async () => {
+  const source = await read('docs/architecture/DOCUMENT_SIGNING.md')
+  assert.match(source, /DocumentSigningScreen/)
+  assert.match(source, /document-registry/)
+  assert.match(source, /file-viewer/)
+  assert.match(source, /must not be simulated|не должны.*имитироваться/i)
 })

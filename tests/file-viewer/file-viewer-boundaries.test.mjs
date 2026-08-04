@@ -36,9 +36,9 @@ test('viewer components release resources and cancel pending requests', () => {
 
 test('legacy file implementation paths are no longer used', () => {
   const createSection = read('app/modules/document-create/components/DocumentCreateFilesSection.vue')
-  const signingSection = read('app/modules/document-signing/components/DocumentSigningViewerSection.vue')
+  const signingWorkspace = read('app/modules/document-signing/components/DocumentSigningWorkspace.vue')
 
   assert.match(createSection, /from ['"]~\/modules\/file-viewer['"]/)
-  assert.match(signingSection, /from ['"]~\/modules\/file-viewer['"]/)
+  assert.match(signingWorkspace, /from ['"]~\/modules\/file-viewer['"]/)
   assert.doesNotMatch(createSection, /~\/composables\/api\/useFileEntries/)
 })

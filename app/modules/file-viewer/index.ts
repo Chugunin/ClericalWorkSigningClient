@@ -3,6 +3,7 @@ export { default as FileInlineViewer } from './components/FileInlineViewer.vue'
 export { default as FileViewer } from './components/FileViewer.vue'
 
 export { saveFileEntry, useFileEntries } from './composables/useFileEntries'
+export { fetchFileBlob } from './composables/usePhysicalFile'
 export {
   canPreviewFileKind,
   getExtension,

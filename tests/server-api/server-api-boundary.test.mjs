@@ -12,6 +12,11 @@ const endpointFiles = [
   'server/api/documents/index.post.ts',
   'server/api/files/entries.post.ts',
   'server/api/files/physical/[fileId].get.ts',
+  'server/api/pdf/sign.post.ts',
+  'server/api/pdf/verify.post.ts',
+  'server/api/certificates/current.get.ts',
+  'server/api/certificates/create.post.ts',
+  'server/api/certificates/[certificateId]/revoke.post.ts',
 ]
 
 test('server endpoints are grouped by resources and legacy flat endpoints are removed', () => {
@@ -46,6 +51,7 @@ test('external API details are centralized in server shared and gateways', () =>
     'server/modules/documents/documents.gateway.ts',
     'server/modules/dictionaries/dictionaries.gateway.ts',
     'server/modules/files/files.gateway.ts',
+    'server/modules/document-signing/document-signing.gateway.ts',
   ]) {
     assert.match(read(gateway), /#server\/shared\/external-api/)
   }
@@ -58,6 +64,7 @@ test('server layer never imports client application modules', () => {
     'server/modules/documents/documents.gateway.ts',
     'server/modules/dictionaries/dictionaries.gateway.ts',
     'server/modules/files/files.gateway.ts',
+    'server/modules/document-signing/document-signing.gateway.ts',
   ]
   for (const file of files) assert.doesNotMatch(read(file), /~\/modules|app\/modules/)
 })
@@ -70,6 +77,10 @@ test('JSON BFF endpoints expose the shared ApiResponse envelope', () => {
     'server/api/documents/index.get.ts',
     'server/api/documents/index.post.ts',
     'server/api/files/entries.post.ts',
+    'server/api/pdf/verify.post.ts',
+    'server/api/certificates/current.get.ts',
+    'server/api/certificates/create.post.ts',
+    'server/api/certificates/[certificateId]/revoke.post.ts',
   ]) {
     const source = read(file)
     assert.match(source, /ApiResponse</, file)
